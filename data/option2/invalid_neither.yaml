@@ -1,0 +1,5 @@
+# An empty value object is the same silence the strict option produced, just nested.
+sample_id: SAMP:0204
+depth:
+  has_unit: m
+env_broad_scale: terrestrial biome

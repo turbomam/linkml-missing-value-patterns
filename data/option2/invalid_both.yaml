@@ -1,0 +1,7 @@
+# A value and a reason for its absence cannot both be true.
+sample_id: SAMP:0203
+depth:
+  has_numeric_value: 12.5
+  has_unit: m
+  reason_for_absence: unknown
+env_broad_scale: terrestrial biome

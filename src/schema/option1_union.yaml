@@ -1,0 +1,47 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option1
+name: option1_union
+title: "Option 1: union of the real range with a reason value set"
+description: >-
+  The slot stays required. Its range becomes "a real value, or a declared reason". This is
+  the shape sketched by cmungall on https://github.com/linkml/linkml/issues/178 in 2022 and
+  the shape MIxS implies but never wires up with InsdcMissingValueEnum.
+
+  What you gain: one slot, one required flag, and a submitter can always fill it in honestly.
+  What you pay: the slot is no longer strongly typed. Every consumer has to branch on the
+  value's type, the SQL column widens to text, and the RDF object is a reason class where a
+  measurement was expected.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Biosample:
+    tree_root: true
+    description: >-
+      A sample where each mandatory slot accepts either its real range or a reason for
+      absence.
+    slots:
+      - sample_id
+      - depth_m
+      - env_broad_scale
+    slot_usage:
+      depth_m:
+        required: true
+        range: Any
+        any_of:
+          - range: float
+          - range: MissingValueReasonEnum
+      env_broad_scale:
+        required: true
+        range: Any
+        any_of:
+          - range: EnvBroadScaleEnum
+          - range: MissingValueReasonEnum

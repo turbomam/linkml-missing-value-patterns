@@ -1,0 +1,84 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option3
+name: option3_sibling
+title: "Option 3: sibling reason slot, enforced by rules"
+description: >-
+  The real slot stays strongly typed and becomes optional. A sibling slot holds the reason.
+  Class rules make the pair behave as if the original slot were still mandatory: absent value
+  requires a reason, present value forbids one.
+
+  What you gain: the strong type survives untouched, so the SQL column stays numeric and the
+  RDF object stays a measurement. Tabular submitters get one extra column instead of a nested
+  object.
+
+  What you pay: two slots per mandatory field, and the mandatoriness now lives in a rule
+  rather than in "required: true", so anything that reads the schema naively (a form builder,
+  a docs page, a naive JSON Schema consumer) will report the field as optional.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Biosample:
+    tree_root: true
+    description: >-
+      A sample where each mandatory field is a pair: the value, and the reason it is absent.
+    slots:
+      - sample_id
+      - depth_m
+      - depth_m_missing_reason
+      - env_broad_scale
+      - env_broad_scale_missing_reason
+    rules:
+      - title: depth_absent_requires_a_reason
+        preconditions:
+          slot_conditions:
+            depth_m:
+              value_presence: ABSENT
+        postconditions:
+          slot_conditions:
+            depth_m_missing_reason:
+              value_presence: PRESENT
+      - title: depth_present_forbids_a_reason
+        preconditions:
+          slot_conditions:
+            depth_m:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            depth_m_missing_reason:
+              value_presence: ABSENT
+      - title: env_broad_scale_absent_requires_a_reason
+        preconditions:
+          slot_conditions:
+            env_broad_scale:
+              value_presence: ABSENT
+        postconditions:
+          slot_conditions:
+            env_broad_scale_missing_reason:
+              value_presence: PRESENT
+      - title: env_broad_scale_present_forbids_a_reason
+        preconditions:
+          slot_conditions:
+            env_broad_scale:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            env_broad_scale_missing_reason:
+              value_presence: ABSENT
+
+slots:
+  depth_m_missing_reason:
+    description: Why depth_m is absent.
+    range: MissingValueReasonEnum
+
+  env_broad_scale_missing_reason:
+    description: Why env_broad_scale is absent.
+    range: MissingValueReasonEnum

@@ -1,0 +1,90 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option2
+name: option2_reified
+title: "Option 2: reified value object carrying either a value or a reason"
+description: >-
+  The mandatory slot keeps a single strong range: a value object. The object carries the
+  measurement or the reason it is absent, never both and never neither. Rules enforce the
+  exclusive-or.
+
+  This is the only option that keeps the slot both required and strongly typed while still
+  letting a submitter declare a good reason, and it is the only one that maps cleanly into an
+  RDF graph, because the value node still exists and can be annotated.
+
+  What you pay: every value becomes an object, so the flat tabular shape is gone. NMDC's
+  QuantityValue is one step away from being this already.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  UO: http://purl.obolibrary.org/obo/UO_
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Biosample:
+    tree_root: true
+    description: A sample whose depth is a required value object.
+    slots:
+      - sample_id
+      - depth
+      - env_broad_scale
+    slot_usage:
+      depth:
+        required: true
+      env_broad_scale:
+        required: true
+
+  DepthMeasurement:
+    description: >-
+      A depth measurement, or a declared reason there is none. Exactly one of
+      has_numeric_value and reason_for_absence must be present.
+    slots:
+      - has_numeric_value
+      - has_unit
+      - reason_for_absence
+      - reason_detail
+      - reason_note
+    rules:
+      - title: a_value_forbids_a_reason
+        description: If a numeric value is present, no reason for absence may be given.
+        preconditions:
+          slot_conditions:
+            has_numeric_value:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            reason_for_absence:
+              value_presence: ABSENT
+      - title: no_value_requires_a_reason
+        description: If no numeric value is present, a reason for absence is required.
+        preconditions:
+          slot_conditions:
+            has_numeric_value:
+              value_presence: ABSENT
+        postconditions:
+          slot_conditions:
+            reason_for_absence:
+              value_presence: PRESENT
+
+slots:
+  depth:
+    description: Depth below the surface, as a value object.
+    range: DepthMeasurement
+    inlined: true
+
+  has_numeric_value:
+    description: The number part of the measurement.
+    range: float
+
+  has_unit:
+    description: The unit of the measurement. Meaningful even when the value is absent.
+    range: string
+
+  reason_for_absence:
+    description: Why no value is recorded.
+    range: MissingValueReasonEnum

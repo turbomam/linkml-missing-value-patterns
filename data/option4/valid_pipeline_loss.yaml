@@ -1,0 +1,12 @@
+# The cause no other option can express: the value existed and the pipeline lost it.
+# That is a fact about the pipeline, not about the sample.
+samples:
+  - sample_id: SAMP:0403
+    env_broad_scale: freshwater biome
+missing_value_reports:
+  - about_sample: SAMP:0403
+    about_slot: depth_m
+    reason: not available
+    reason_detail: source data not available
+    reported_by: ingest pipeline
+    reported_on: '2026-08-31'

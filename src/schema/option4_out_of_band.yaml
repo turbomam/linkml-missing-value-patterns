@@ -1,0 +1,95 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option4
+name: option4_out_of_band
+title: "Option 4: out-of-band missing-value report"
+description: >-
+  The sample record carries only real values. Absence is recorded in a separate report object
+  that names the sample, the slot, and the reason. Nothing about the sample's own shape
+  changes, so the strong ranges and the flat table survive intact.
+
+  This is the only option that can record the cause nobody else models: a value that existed,
+  was submitted, and was lost in transit (a mapping with no target slot, a failed unit
+  conversion, a dropped column). That is a fact about the pipeline, not about the sample, and
+  it does not belong in the sample record.
+
+  What you pay: the schema can no longer enforce the pairing. A rule cannot reach across
+  objects, so "every absent mandatory slot has a report" has to be checked by code. That is a
+  real cost and it is stated here rather than hidden.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Dataset:
+    tree_root: true
+    description: A collection of samples plus the reports explaining what is absent from them.
+    slots:
+      - samples
+      - missing_value_reports
+
+  Biosample:
+    description: >-
+      A sample. Both exemplar slots are optional here, because absence is recorded elsewhere.
+    slots:
+      - sample_id
+      - depth_m
+      - env_broad_scale
+
+  MissingValueReport:
+    description: A record that a named slot of a named sample has no value, and why.
+    slots:
+      - about_sample
+      - about_slot
+      - reason
+      - reason_detail
+      - reported_by
+      - reported_on
+    slot_usage:
+      about_sample:
+        required: true
+      about_slot:
+        required: true
+      reason:
+        required: true
+
+slots:
+  samples:
+    range: Biosample
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+
+  missing_value_reports:
+    range: MissingValueReport
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+
+  about_sample:
+    description: The sample the report is about.
+    range: Biosample
+
+  about_slot:
+    description: The name of the slot that has no value.
+    range: string
+
+  reason:
+    description: Why the slot has no value.
+    range: MissingValueReasonEnum
+
+  reported_by:
+    description: >-
+      Who or what determined the reason. A submitter and an ETL step are different sources
+      and should not be conflated.
+    range: string
+
+  reported_on:
+    description: When the reason was determined.
+    range: date

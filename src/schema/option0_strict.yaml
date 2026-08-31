@@ -1,0 +1,33 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option0
+name: option0_strict
+title: "Option 0: strict, no escape hatch"
+description: >-
+  Baseline. Both exemplar slots are required and strongly typed, and there is no way to say
+  "we know this is missing and here is why". A submitter with a good reason has two moves
+  left: omit the whole record, or put something untrue in the field. This is what most
+  schemas do today, and it is why missing-value codes end up smuggled into free-text slots.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Biosample:
+    tree_root: true
+    description: A sample whose depth and broad-scale environment are both mandatory.
+    slots:
+      - sample_id
+      - depth_m
+      - env_broad_scale
+    slot_usage:
+      depth_m:
+        required: true
+      env_broad_scale:
+        required: true

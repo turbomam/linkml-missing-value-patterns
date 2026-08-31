@@ -1,0 +1,140 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/common
+name: common
+title: Shared slots and value sets
+description: >-
+  Slots, types and value sets shared by every option in this repository. The two exemplar
+  slots are deliberately different in kind: depth_m is numeric and env_broad_scale is
+  categorical with an ontology-term range. They need different answers, which is the point.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  ENVO: http://purl.obolibrary.org/obo/ENVO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  UO: http://purl.obolibrary.org/obo/UO_
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+  Any:
+    class_uri: linkml:Any
+    description: >-
+      The LinkML "any" class. Required as the declared range of a slot whose real range is
+      given by an any_of expression. See https://linkml.io/linkml/schemas/advanced.html
+
+slots:
+  sample_id:
+    description: Local identifier for the sample.
+    identifier: true
+    range: string
+    required: true
+
+  depth_m:
+    description: Depth below the surface, in meters. The numeric exemplar.
+    range: float
+
+  env_broad_scale:
+    description: >-
+      Broad-scale environmental context. The categorical exemplar, ranged over an
+      ontology-backed value set rather than a string.
+    range: EnvBroadScaleEnum
+
+  reason_detail:
+    description: A finer-grained reason for absence, when one is known.
+    range: DetailedMissingValueReasonEnum
+
+  reason_note:
+    description: Free text for anything the reason value sets cannot carry.
+    range: string
+
+enums:
+  EnvBroadScaleEnum:
+    description: >-
+      A deliberately tiny stand-in for the MIxS env_broad_scale value set. Real values are
+      ENVO classes, which is what makes a string sentinel a type violation here.
+    permissible_values:
+      terrestrial biome:
+        meaning: ENVO:00000446
+      marine biome:
+        meaning: ENVO:00000447
+      freshwater biome:
+        meaning: ENVO:00000873
+
+  MissingValueReasonEnum:
+    description: >-
+      Coarse reasons a value is absent. Four distinctions, which is the number both INSDC and
+      NCIT converge on: the field does not apply, no value was ever determined, a value exists
+      but is not available to us, and a value exists but falls outside the allowed value set.
+    comments:
+      - >-
+        The meanings point at children of NCIT:C48655 "Missing Value Reason", which has 38
+        children and is the largest ready-made value set for this purpose. It is a flat NCIT
+        branch rather than an OBO-Foundry upper structure, so treat these as interim mappings.
+        An OBO-side hierarchy for incomplete data records is under discussion as of 2026-08.
+      - >-
+        "unknown" maps to NCIT:C157157 "Indeterminate or Unknown" rather than NCIT:C17998
+        "Unknown", because C17998 sits under NCIT:C27993 "General Qualifier" and not under
+        Missing Value Reason. Checked against the OLS API on 2026-08-31.
+      - >-
+        "other" has no meaning. NCIT:C17649 "Other" is also under General Qualifier rather than
+        Missing Value Reason, so that branch has no term for it. This is a real gap in the
+        target vocabulary, not an oversight here.
+      - >-
+        INSDC's list maps onto these four as follows: "not applicable" stays not applicable;
+        "missing" and "not collected" become unknown; "not provided" and "restricted access"
+        both become not available. That last pair is a genuine loss, because whether to ask
+        again depends on which one it was. If that distinction matters to you, use
+        DetailedMissingValueReasonEnum alongside this one.
+    see_also:
+      - https://www.insdc.org/technical-specifications/missing-value-reporting/
+    permissible_values:
+      not applicable:
+        description: >-
+          It does not make sense for there to be a value in this field. Example: a sampling
+          depth for a synthetic construct.
+        meaning: NCIT:C48660
+      unknown:
+        description: >-
+          A value was never determined. Example: a legacy sample whose depth was not recorded
+          at collection time.
+        meaning: NCIT:C157157
+      not available:
+        description: >-
+          A value may have been determined, but it is not available to us. Example: a depth
+          withheld because publishing it would identify a protected site.
+        meaning: NCIT:C126101
+      other:
+        description: >-
+          A value was determined and falls outside the allowed value set. Example: an
+          environment that no term in the value set covers.
+
+  DetailedMissingValueReasonEnum:
+    description: >-
+      Finer reasons, for use alongside the coarse enum when the specific cause matters. Every
+      value here is a verified child of NCIT:C48655 "Missing Value Reason", checked against
+      the OLS API on 2026-08-31.
+    permissible_values:
+      not asked:
+        meaning: NCIT:C80217
+      not done:
+        meaning: NCIT:C49484
+      not recorded:
+        meaning: NCIT:C185193
+      cannot be assessed:
+        meaning: NCIT:C48657
+      insufficient quantity:
+        meaning: NCIT:C177690
+      insufficient quality:
+        meaning: NCIT:C177691
+      response declined:
+        meaning: NCIT:C51024
+      masked data:
+        meaning: NCIT:C150904
+      temporarily unavailable:
+        meaning: NCIT:C150903
+      source data not available:
+        meaning: NCIT:C67329

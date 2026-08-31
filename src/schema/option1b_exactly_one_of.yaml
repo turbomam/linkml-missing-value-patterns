@@ -1,0 +1,41 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/option1b
+name: option1b_exactly_one_of
+title: "Option 1b: the same union written with exactly_one_of"
+description: >-
+  Identical to option 1 except that the union uses exactly_one_of rather than any_of.
+  exactly_one_of is the operator https://github.com/linkml/linkml/issues/178 actually
+  proposed, and https://github.com/linkml/linkml/issues/2283 reports that it misbehaves with
+  linkml:types ranges. This schema exists so the repository can show what happens rather than
+  cite the issue and move on. See docs/findings.md for the measured result.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Biosample:
+    tree_root: true
+    slots:
+      - sample_id
+      - depth_m
+      - env_broad_scale
+    slot_usage:
+      depth_m:
+        required: true
+        range: Any
+        exactly_one_of:
+          - range: float
+          - range: MissingValueReasonEnum
+      env_broad_scale:
+        required: true
+        range: Any
+        exactly_one_of:
+          - range: EnvBroadScaleEnum
+          - range: MissingValueReasonEnum

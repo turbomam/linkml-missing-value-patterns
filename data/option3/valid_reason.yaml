@@ -1,0 +1,4 @@
+# Depth was never determined. The sibling slot says so, and depth_m keeps its float range.
+sample_id: SAMP:0302
+depth_m_missing_reason: unknown
+env_broad_scale: terrestrial biome

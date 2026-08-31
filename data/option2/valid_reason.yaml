@@ -1,0 +1,8 @@
+# The value node still exists, still knows its unit, and carries why there is no number.
+sample_id: SAMP:0202
+depth:
+  has_unit: m
+  reason_for_absence: not available
+  reason_detail: masked data
+  reason_note: Exact depth withheld under the site data agreement.
+env_broad_scale: terrestrial biome

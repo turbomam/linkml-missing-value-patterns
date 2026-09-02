@@ -7,6 +7,13 @@ and LinkML has no single metaslot that grants both.
 This repository holds six schemas that grant them in different ways, with example data for
 each and a script that checks every example actually behaves the way its filename claims.
 
+It exists because two communities are working on the same question from opposite ends. On the
+LinkML side, https://github.com/orgs/linkml/discussions/3813 asks whether a `required` slot may
+hold a null. On the OBO side, OBI has `OBI:0002199` "reason for lack of data item" and a long
+running discussion at https://github.com/obi-ontology/obi/issues/1230 about what it means for an
+assay to produce no datum. `docs/crosswalk.md` connects the two: which cause of absence lands in
+which option, what each one maps to in INSDC and NCIT, and where OBO has no term yet.
+
 ## The problem
 
 A schema author marks `depth_m` as `required: true` with `range: float`. A submitter has a
@@ -20,7 +27,10 @@ negative control sample collected in a lab, where depth does not apply. They hav
 INSDC standardised a vocabulary for the third problem
 (https://www.insdc.org/technical-specifications/missing-value-reporting/) and MIxS carries it
 as `InsdcMissingValueEnum`, but in the MIxS source schema that value set is referenced by no
-slot and mapped to no ontology term, so nothing enforces or resolves it.
+slot and mapped to no ontology term, so nothing enforces or resolves it. Checked 2026-09-02
+against MIxS at commit `6a2a6ed`, which is after the v7.0.1 tag: `InsdcMissingValueEnum` appears
+once in `src/mixs/schema/mixs.yaml`, at its own definition on line 47, and none of its 13
+permissible values carries a `meaning:`.
 
 ## The options
 
@@ -74,6 +84,11 @@ uv sync
 the result with the expectation in the filename: `valid_*` must pass, `invalid_*` must fail.
 It exits non-zero on any disagreement.
 
+All 23 files behaved as their names claim when this was last run, on 2026-09-02 against
+linkml 1.11.1. Every measured claim in this repository comes from that version, and `uv.lock`
+is committed so you get the same one. If you reproduce against a different release and get a
+different answer, that difference is worth reporting.
+
 ## What was measured, not assumed
 
 `docs/findings.md` records what actually happens, including the things that surprised me: how
@@ -93,3 +108,15 @@ the NCIT terms that were checked and the two that were rejected, with the reason
 - https://github.com/obi-ontology/obi/issues/1230 Provide patterns for relating absence of
   actionable data with assay "successfulness". The same question from the process side: if the
   assay produced no datum, did the assay happen.
+
+## What I would like feedback on
+
+- Should a required-but-nullable slot also be able to carry a reason for the null, or are those
+  two separate problems?
+- `value_presence` is marked `status: unstable` in the metamodel, and options 2 and 3 both
+  depend on it. Is it safe to build on?
+- Is `other` a missing-value reason at all, or a value-set coverage problem?
+- Where does a value that was lost in transit belong: a validation report, provenance, or
+  neither?
+
+Issues and pull requests are welcome, and so is being told I have overcomplicated this.

@@ -1,7 +1,8 @@
 # Measured behavior
 
-Everything here was run on 2026-08-31 against linkml 1.11.1 (the released version, installed
-by `uv sync` from this repository's `pyproject.toml`) on macOS with Python from that venv.
+The sections before "Conversion to OWL, TSV and RDF" were run on 2026-08-31, and that section
+on 2026-09-14, all against linkml 1.11.1 (the released version, installed by `uv sync` from this
+repository's `pyproject.toml`) on macOS with Python from that venv.
 Rerun it yourself with `./run_checks.sh`.
 
 ## All 23 example files behave as their names claim
@@ -102,7 +103,8 @@ pTX, `OBI:0002204` pNX) and all of them are cancer staging.
 ## Conversion to OWL, TSV and RDF
 
 Run on 2026-09-14 with linkml 1.11.1 and linkml-runtime 1.11.1, using `./convert.sh`. It writes
-OWL for every schema, gathers each option's valid examples into one YAML file, and converts that
+OWL for every option schema (common.yaml is imported by each, not converted on its own), gathers
+each option's valid examples into one YAML file, and converts that
 file to TSV and Turtle wherever the conversion works. The table lists what each option gets. All
 of it goes under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
 
@@ -115,8 +117,9 @@ of it goes under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
 | 3 sibling | yes | yes, one extra column | yes |
 | 4 out-of-band | yes | yes, as two tables | yes |
 
-Side by side, options 2 and 3 show why `meaning:` matters. The TSV writes the reason as the
-label `unknown`, and the Turtle writes the same reason as the IRI `NCIT:C157157`.
+The TSV and Turtle for the same option show why `meaning:` matters. In option 3 the TSV writes the
+reason as the label `unknown` and the Turtle writes it as the IRI `NCIT:C157157`. In option 2 the
+same record pair is `not available` and `NCIT:C126101`.
 
 ### The union options validate, but do not leave YAML
 

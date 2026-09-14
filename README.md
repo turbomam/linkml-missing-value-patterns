@@ -94,7 +94,7 @@ different answer, that difference is worth reporting.
 just convert    # or: uv sync && ./convert.sh
 ```
 
-This writes OWL for every schema and gathers each option's valid examples into one YAML file
+This writes OWL for every option schema and gathers each option's valid examples into one YAML file
 under `generated/`, then converts that file to TSV and Turtle wherever the conversion works.
 The table in `docs/findings.md` lists exactly which files each option gets. It uses only the standard LinkML tools
 (`gen-owl`, `linkml-convert`).

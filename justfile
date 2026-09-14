@@ -13,7 +13,7 @@ setup:
 check: setup
     ./run_checks.sh
 
-# Rebuild generated/: OWL for every schema, each option's examples as YAML, and TSV and Turtle where conversion works
+# Rebuild generated/: OWL for every option schema, each option's examples as YAML, and TSV and Turtle where conversion works
 convert: setup
     ./convert.sh
 

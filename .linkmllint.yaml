@@ -4,8 +4,10 @@ rules:
   # Every class and slot needs a description.
   recommended:
     level: error
-  # Enum value names here are the literal INSDC and NCIT terms a submitter types, such as
-  # "not applicable: control sample", so they cannot follow snake_case or UPPER_SNAKE naming.
+  # Every enum value in these schemas is a label a submitter types: INSDC and NCIT terms such as
+  # "not applicable: control sample", and local labels such as "physical measurement" and
+  # "lost in transit". None can follow snake_case or UPPER_SNAKE, so all enum values are exempt.
+  # Class, slot and enum names are still checked.
   standard_naming:
     level: warning
     exclude_type:

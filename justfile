@@ -22,6 +22,8 @@ lint: setup
     {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/schema
     {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/demos/recommended.yaml
     {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/demos/ifabsent.yaml
+    # Metamodel validation: with no -s, linkml-validate treats each positional file as a schema and
+    # validates it against the LinkML metamodel (see linkml-validate --help, linkml 1.11.1).
     for f in napoleon/schema/*.yaml napoleon/demos/recommended.yaml napoleon/demos/ifabsent.yaml; do {{validate}} "$f" || exit 1; done
     uvx --from yamllint==1.38.0 yamllint -c .yamllint.yaml napoleon
 

@@ -180,3 +180,11 @@ datatype property (a number) and an object property (a term IRI).
 `linkml-convert` writes TSV only from a container class, with `--index-slot` naming the list
 slot. `BiosampleSet` holds a list of samples and is otherwise unused. `run_checks.sh` still
 validates each example against `Biosample` directly.
+
+### `gen-owl` output order changes between runs
+
+Running `./convert.sh` twice on 2026-09-14 changed all six OWL files: the same number of lines
+added and removed, only in the order of the anonymous restriction blocks. `rdflib.compare.isomorphic`
+reported each rebuilt graph isomorphic to the committed one. So a rebuild can show a diff in
+`generated/owl/` that carries no change in meaning. Compare the graphs, not the text, before
+committing a rebuild.

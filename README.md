@@ -76,8 +76,7 @@ lands, the `meaning:` values here are the only thing that needs to change.
 ## Running it
 
 ```bash
-uv sync
-./run_checks.sh
+just check      # or: uv sync && ./run_checks.sh
 ```
 
 `run_checks.sh` validates every file under `data/` against its option's schema and compares
@@ -92,7 +91,7 @@ different answer, that difference is worth reporting.
 ## The same data as OWL, TSV and RDF
 
 ```bash
-./convert.sh
+just convert    # or: uv sync && ./convert.sh
 ```
 
 This writes OWL for every schema, and each option's valid examples as one YAML file, one TSV

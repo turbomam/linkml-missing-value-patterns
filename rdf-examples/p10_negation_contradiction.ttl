@@ -2,18 +2,18 @@
 #
 # LinkML option: none.
 #
-# A second source reports a venous blood glucose assay as part of encounter1. With
-# OBI:2100072 subClassOf OBI:2100020 and 'part of' inverseOf 'has part' (base.ttl), this
-# violates both the complement class membership and the negative property assertion in
-# p10_negation.ttl. Load together with base.ttl and p10_negation.ttl.
+# A second (invented) source reports a length measurement assay as part of examination1. With
+# 'part of' inverseOf 'has part' (base.ttl), this violates both the complement class membership
+# and the negative property assertion in p10_negation.ttl.
+# Load together with base.ttl and p10_negation.ttl.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 
-ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter1 .
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:examination1 .

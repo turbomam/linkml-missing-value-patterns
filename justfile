@@ -134,9 +134,16 @@ tables: setup
     ! sh -c 'cd {{s}} && ../../{{bin}}/linkml-convert -s union.yaml -C HeightRecordSet --index-slot records -t tsv -o ../../{{build}}/tables/union.tsv ../data/union/all_valid_records.yaml 2>&1 | grep -E "Error|Exception" | tail -1; exit 1'
     ! {{bin}}/python -c 'import subprocess,sys; r=subprocess.run(["../../{{bin}}/linkml-convert","-s","union.yaml","-C","HeightRecordSet","--index-slot","records","-t","ttl","../data/union/all_valid_records.yaml"],cwd="{{s}}",capture_output=True,text=True); print([l for l in r.stderr.splitlines() if "Error" in l][-1:]); sys.exit(r.returncode)'
 
-# rdf: the blood glucose RDF patterns (being rebuilt around Napoleon's height)
+# rdf: Napoleon's height in OBO terms; each query finds its pattern, and HermiT checks every merged file
 rdf: setup
     {{bin}}/python rdf-examples/run_queries.py --merged-dir {{build}}/rdf-merged
+    @echo "== HermiT: these merged patterns are consistent"
+    for p in p00_complete p01_nothing_asserted p03_reason_as_term p04_value_node_without_value p05_failed_assay p06_not_applicable p07_restricted_access p08_bounded_value p09_lost_in_transit p10_negation p11_unknown_but_exists p12_asked_unknown; do robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_$p.ttl --output {{build}}/rdf-merged/$p.ofn || exit 1; echo "consistent: $p"; done
+    @echo "== HermiT: these are inconsistent on purpose (each line is expected to fail)"
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p02_sentinel_literal.ttl --output {{build}}/rdf-merged/p02.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p05_failed_assay_contradiction.ttl --output {{build}}/rdf-merged/p05c.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p06_not_applicable_contradiction.ttl --output {{build}}/rdf-merged/p06c.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p10_negation_contradiction.ttl --output {{build}}/rdf-merged/p10c.ofn
 
 # Rebuild generated/ for the original depth examples under src/ (pull request 2)
 convert: setup

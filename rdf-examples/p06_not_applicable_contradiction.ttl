@@ -2,18 +2,18 @@
 #
 # LinkML option: none.
 #
-# Asserts a venous blood glucose assay as part of the remote encounter. base.ttl carries
-# OBI:2100072 subClassOf OBI:2100020 and 'part of' inverseOf 'has part', so the reasoner
-# derives that encounter2 has a glucose assay part, violating the cardinality-0 restriction.
+# Asserts a length measurement assay as part of the hair lock relic examination. With
+# 'part of' inverseOf 'has part' (base.ttl), the reasoner derives that relicExam1 has a length
+# measurement assay part, violating the cardinality-0 restriction.
 # Load together with base.ttl and p06_not_applicable.ttl.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 
-ex:glucoseAssay2 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter2 .
+ex:heightAssay2 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:relicExam1 .

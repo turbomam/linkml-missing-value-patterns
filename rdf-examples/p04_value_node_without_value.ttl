@@ -2,39 +2,39 @@
 #
 # LinkML option: option2 value object holding a value or a reason.
 #
-# The datum has a real scalar value specification node with its unit, but no numeric value.
-# A GENEPIO:0001620 'not collected' datum status is about that value specification node.
+# The datum has a real scalar value specification node with its unit (metre), but no numeric
+# value. A GENEPIO:0001668 'not provided' datum status is about that value specification node:
+# the archive has not been given the number, which may arrive later.
 #
 # Compared with p03: the value position still holds a value specification, so the OBI range
-# axiom is respected and the unit (what would have been measured) survives. The reason sits
-# beside the value, linked by IAO:0000136 'is about' (GENEPIO defines datum status as "a data
-# item which is about the collection state of a datum").
-# A consumer can infer that a value of known kind and unit was expected and why it is absent.
+# axiom is respected and the unit (what would have been measured) survives. The reason sits beside
+# the value, linked by IAO:0000136 'is about'.
+# A consumer can infer that a height in metres was expected and that it has not been provided.
 # They cannot infer any bound on the value.
 
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:      <https://example.org/encounter/> .
+@prefix ex:      <https://example.org/napoleon/> .
 @prefix BFO:     <http://purl.obolibrary.org/obo/BFO_> .
 @prefix IAO:     <http://purl.obolibrary.org/obo/IAO_> .
 @prefix OBI:     <http://purl.obolibrary.org/obo/OBI_> .
 @prefix GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_> .
 @prefix UO:      <http://purl.obolibrary.org/obo/UO_> .
 
-ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter1 ;
-    OBI:0000293 ex:specimen1 ;
-    OBI:0000299 ex:glucoseDatum1 .
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:examination1 ;
+    OBI:0000293 ex:napoleon ;
+    OBI:0000299 ex:heightDatum1 .
 
-ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
-    IAO:0000136 ex:specimen1 ;
+ex:heightDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:napoleonHeight ;
     OBI:0001938 ex:valueSpec1 .
 
 ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
-    IAO:0000039 UO:0010067 .
+    IAO:0000039 UO:0000008 .
     # no OBI:0001937 has specified numeric value
 
-ex:status1 a owl:NamedIndividual , GENEPIO:0001620 ;
+ex:status1 a owl:NamedIndividual , GENEPIO:0001668 ;
     IAO:0000136 ex:valueSpec1 .

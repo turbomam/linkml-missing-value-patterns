@@ -1,4 +1,4 @@
-# p01: measurement data with no value specification and no datum status about them (silent absence)
+# p01_nothing_asserted: examinations of a patient with no process parts, no statement about them, and no negation (silent absence)
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -10,12 +10,15 @@ PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
 PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
 PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
 PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
 PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
 PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
 
-SELECT ?assay ?datum WHERE {
-  ?assay OBI:0000299 ?datum .
-  ?datum a IAO:0000109 .
-  FILTER NOT EXISTS { ?datum OBI:0001938 ?vs }
-  FILTER NOT EXISTS { ?status IAO:0000136 ?datum ; a/rdfs:subClassOf* GENEPIO:0001850 }
+SELECT ?exam ?patient WHERE {
+  ?exam a OGMS:0000097 ; RO:0000057 ?patient .
+  ?patient RO:0000087 ?role . ?role a OBI:0000093 .
+  FILTER NOT EXISTS { ?part BFO:0000050 ?exam }
+  FILTER NOT EXISTS { ?statement IAO:0000136 ?exam }
+  FILTER NOT EXISTS { ?exam a ?c . ?c owl:complementOf ?r }
 }

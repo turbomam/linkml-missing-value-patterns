@@ -2,32 +2,32 @@
 #
 # LinkML option: option0 strict (every option can also carry this case).
 #
-# The glucose assay, part of the encounter, takes the blood specimen as specified input and
-# has a measurement datum as specified output. The datum has a scalar value specification with
-# a numeric value and a unit.
+# A length measurement assay, part of examination 1, takes Napoleon as specified input and has a
+# measurement datum about his height as specified output. The datum has a scalar value
+# specification: 1.67 metre (the sourced estimate for 5 feet 2 inches in French measures).
 #
-# A consumer can infer: a value exists, what it is, its unit, and which specimen and encounter
-# it came from. Nothing about absence needs to be read.
+# A consumer can infer: a value exists, what it is, its unit, and which person and examination it
+# came from. Nothing about absence needs to be read.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
 @prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 @prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
 
-ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter1 ;
-    OBI:0000293 ex:specimen1 ;
-    OBI:0000299 ex:glucoseDatum1 .
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:examination1 ;
+    OBI:0000293 ex:napoleon ;
+    OBI:0000299 ex:heightDatum1 .
 
-ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
-    IAO:0000136 ex:specimen1 ;
+ex:heightDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:napoleonHeight ;
     OBI:0001938 ex:valueSpec1 .
 
 ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
-    OBI:0001937 "95"^^xsd:decimal ;
-    IAO:0000039 UO:0010067 .
+    OBI:0001937 "1.67"^^xsd:decimal ;
+    IAO:0000039 UO:0000008 .

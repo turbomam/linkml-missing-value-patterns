@@ -1,50 +1,40 @@
-# p05 the assay ran and produced no datum
+# p05 the height measurement was attempted and produced no datum
 #
 # LinkML option: none. The repo's crosswalk (docs/crosswalk.md, cause c) puts this outside the
 # six options because it is a fact about a process, not about a field.
 #
 # Live discussion: https://github.com/obi-ontology/obi/issues/1230
 #   "Provide patterns for relating absence of actionable data with assay 'successfulness'"
-#   (open since 2020-09-06). Positions recorded there, read 2026-09-14:
-#   - 2020-09-14 OBI dev call: assays are understood and asserted to be completed planned processes.
-#   - 2020-09-28: "intends to implement" is not an object property in OBI or COB; consensus to
-#     request one in COB.
-#   - 2026-04-06: NMDC uses COB:0000082 'planned process' for runs that can fail, because
-#     COB:0000035 'completely executed planned process' is too narrow.
-#   - 2026-04-07: RO:0002214 'has prototype' proposed as the link from a failed process to a
-#     prototypical completed one; objection that its definition is about anatomical prototypes,
-#     and a counter-position that the shared plan specification is the real link, with support
-#     for a dedicated relation shaped like 'has prototype' that says so. No resolution recorded.
+#   (open since 2020-09-06). See the template rdf-examples/p05_failed_assay.ttl for the positions
+#   recorded there.
 #
-# What exists today (checked 2026-09-14): COB:0000083 'failed planned process' (subclass of
-# COB:0000082, disjoint with COB:0000035 in COB 2025-12-15 and OBI 2026-07-27) and
-# COB:0000085 'intended plan process type', an object property with a label and no definition,
-# domain, or range. Whether COB:0000085 is the "intends to implement" relation requested in
-# 2020 is not stated anywhere I read. It is used here as the closest existing term, pointing at
-# the assay class by punning.
+# What exists (checked 2026-09-14): COB:0000083 'failed planned process' (subclass of COB:0000082,
+# disjoint with COB:0000035 in COB 2025-12-15 and OBI 2026-07-27) and COB:0000085 'intended plan
+# process type', an object property with a label and no definition, domain, or range. It is used
+# here as the closest existing term, pointing at the OBI:0003817 assay class by punning.
 #
 # Consequences of the current axioms, shown by ROBOT (README):
-#   - The run cannot be typed OBI:2100072 'venous blood glucose assay': every assay is a
+#   - The attempt cannot be typed OBI:0003817 'length measurement assay': every assay is a
 #     COB:0000035, which is disjoint with COB:0000083.
-#   - It cannot use OBI:0000293 'has specified input': its domain is COB:0000035. So the
-#     specimen is linked with RO:0000057 'has participant'. See p05_failed_assay_contradiction.ttl.
+#   - It cannot use OBI:0000293 'has specified input' for Napoleon: its domain is COB:0000035. So
+#     he is linked with RO:0000057 'has participant'. See p05_failed_assay_contradiction.ttl.
 #
-# A consumer can infer that a glucose assay was attempted on this specimen during this encounter
+# A consumer can infer that a height measurement of Napoleon was attempted during examination 1
 # and did not complete, so there is no datum to look for. They cannot infer why it failed.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
 @prefix RO:   <http://purl.obolibrary.org/obo/RO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 @prefix COB:  <http://purl.obolibrary.org/obo/COB_> .
 
-ex:glucoseAssay1 a owl:NamedIndividual , COB:0000083 ;
-    rdfs:label "failed glucose assay run 1" ;
-    COB:0000085 OBI:2100072 ;              # intended plan process type (punned class)
-    BFO:0000050 ex:encounter1 ;
-    RO:0000057 ex:specimen1 , ex:provider1 .
+ex:heightAssay1 a owl:NamedIndividual , COB:0000083 ;
+    rdfs:label "failed height measurement attempt 1 (invented)" ;
+    COB:0000085 OBI:0003817 ;              # intended plan process type (punned class)
+    BFO:0000050 ex:examination1 ;
+    RO:0000057 ex:napoleon , ex:physician1 .
     # no OBI:0000299 has specified output

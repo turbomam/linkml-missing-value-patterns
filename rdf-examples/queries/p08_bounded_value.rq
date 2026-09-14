@@ -1,4 +1,4 @@
-# p08: value specifications bounded by a datatype restriction instead of a point value, with any detection limit
+# p08_bounded_value: value specifications bounded by a datatype restriction instead of a point value, with the source estimates
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -10,10 +10,12 @@ PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
 PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
 PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
 PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
 PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
 PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
 
-SELECT ?datum ?vs ?facet ?bound ?lod ?lodValue WHERE {
+SELECT ?datum ?vs ?facet ?bound ?estimate ?estimateValue WHERE {
   ?datum OBI:0001938 ?vs .
   ?vs a ?r .
   ?r owl:onProperty OBI:0001937 ; owl:someValuesFrom ?dt .
@@ -21,5 +23,5 @@ SELECT ?datum ?vs ?facet ?bound ?lod ?lodValue WHERE {
   ?f ?facet ?bound .
   FILTER(?facet IN (xsd:maxExclusive, xsd:maxInclusive, xsd:minExclusive, xsd:minInclusive))
   FILTER NOT EXISTS { ?vs OBI:0001937 ?point }
-  OPTIONAL { ?datum BFO:0000051 ?lod . ?lod a OBI:0003549 ; OBI:0001937 ?lodValue }
+  OPTIONAL { ?datum BFO:0000051 ?estimate . ?estimate a OBI:0001931 ; OBI:0001937 ?estimateValue }
 }

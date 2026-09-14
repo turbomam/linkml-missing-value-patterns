@@ -1,4 +1,4 @@
-# p03: data whose value position holds a datum status instead of a value specification
+# p03_reason_as_term: data whose value position holds a datum status instead of a value specification
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -10,8 +10,10 @@ PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
 PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
 PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
 PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
 PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
 PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
 
 SELECT ?datum ?reason ?reasonClass ?reasonLabel WHERE {
   ?datum a IAO:0000109 ; OBI:0001938 ?reason .

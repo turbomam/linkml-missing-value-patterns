@@ -2,50 +2,43 @@
 #
 # LinkML option: option1 or option2, with a reason value that must stay distinct from blank.
 #
-# The provider asks the patient for their most recent home glucose meter reading. The patient
-# answers that they do not know. That answer is data: a categorical measurement datum output by a
-# survey administration assay, whose categorical value specification is typed NCIT:C79729
-# 'Asked but Unknown' and carries the literal answer.
-# Distinction raised by Corey Cox for BioData Catalyst: a deliberate "unknown" answer must not
-# be merged with a blank (p01).
+# INVENTED: an archive interviewer asked a witness how tall Napoleon was, and the witness answered
+# that they did not know. That answer is data: a categorical measurement datum output by a survey
+# administration assay, whose categorical value specification is typed NCIT:C79729 'Asked but
+# Unknown' and carries the literal answer.
 #
-# Terms, checked 2026-09-14:
-#   - No OBI, IAO, or GENEPIO term for "asked but unknown" was found (OLS search). GENEPIO datum
-#     status has missing, not applicable, not collected, not provided, restricted access,
-#     in process, recorded, and nothing for an answer of unknown.
-#   - NCIT:C79729 'Asked but Unknown' ("An indication that a question was asked and the response
-#     is unknown"), NCIT OBO Edition. Also NCIT:C80217 'Not Asked' and NCIT:C17998 'Unknown'.
-#   - HL7 v3 NullFlavor ASKU "asked but unknown" in http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-#     and FHIR data-absent-reason "asked-unknown" in
-#     http://terminology.hl7.org/CodeSystem/data-absent-reason. These are code system URIs plus
-#     codes, not per-code IRIs, so they appear as a literal below rather than as types.
-#   - Typing a value specification with an NCIT answer class is this example's choice, not an OBI
-#     pattern.
+# Terms (template p12, checked 2026-09-14): no OBI, IAO, or GENEPIO term for "asked but unknown".
+# NCIT:C79729 ("An indication that a question was asked and the response is unknown"). HL7 v3
+# NullFlavor ASKU and FHIR data-absent-reason asked-unknown are code system codes, not per-code
+# IRIs, so they appear as a literal. Typing a value specification with an NCIT answer class is
+# this example's choice, not an OBI pattern.
 #
-# A consumer can infer that the question was asked and the respondent could not answer, which is
-# a finding about the patient's knowledge, not a gap in the record. They cannot infer the glucose
-# value, and must not count this row as missing data.
+# A consumer can infer that the question was asked and the witness could not answer, which is a
+# finding about the witness's knowledge, not a gap in the record. They cannot infer the height,
+# and must not count this record as missing data.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
-@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix RO:   <http://purl.obolibrary.org/obo/RO_> .
 @prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 @prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_> .
 
-ex:surveyAssay1 a owl:NamedIndividual , OBI:0003725 ;
-    rdfs:label "home glucose reading question, encounter 1" ;
-    BFO:0000050 ex:encounter1 ;
-    RO:0000057 ex:patient1 , ex:provider1 ;
+ex:witness1 a owl:NamedIndividual , NCBITaxon:9606 ;
+    rdfs:label "witness 1 (invented)" .
+
+ex:witnessInterview1 a owl:NamedIndividual , OBI:0003725 ;
+    rdfs:label "witness interview 1 (invented archive record)" ;
+    RO:0000057 ex:witness1 ;
     OBI:0000299 ex:answerDatum1 .
 
 ex:answerDatum1 a owl:NamedIndividual , OBI:0000938 ;
-    IAO:0000136 ex:patient1 ;
-    rdfs:comment "Answer to: what was your most recent home glucose meter reading?" ;
+    IAO:0000136 ex:napoleonHeight ;
+    rdfs:comment "Answer to: how tall was he?" ;
     OBI:0001938 ex:answerValueSpec1 .
 
 ex:answerValueSpec1 a owl:NamedIndividual , OBI:0001930 , NCIT:C79729 ;

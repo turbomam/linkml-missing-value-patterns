@@ -3,29 +3,16 @@
 # LinkML option: none. This is what a record looks like when option0 is not enforced, and what
 # every other option degrades to if the reason is dropped.
 #
-# Present: the assay, its specimen input, and a measurement datum as its output.
-# Absent: any value specification, numeric value, unit, or statement about why.
-# (The even emptier case, no assay and no datum at all, is base.ttl on its own.)
+# Present: examination 1 (from base.ttl) with Napoleon and the physician as participants.
+# Absent: any height assay, datum, value, unit, or statement about why.
 #
-# A consumer can infer nothing about the value: under the open-world assumption the missing
-# triples may exist elsewhere. They cannot tell "not applicable", "not collected", "withheld",
-# or "lost in transit" apart, and they cannot tell this record from p12 (asked, answer unknown).
+# A consumer can infer nothing about his height from this record: under the open-world
+# assumption the missing triples may exist elsewhere. They cannot tell "not applicable",
+# "not collected", "withheld", or "lost in transit" apart, and cannot tell this from p12
+# (asked, answer unknown). The only triple this file adds is a human-readable comment.
 
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:  <http://www.w3.org/2002/07/owl#> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix ex:   <https://example.org/encounter/> .
-@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
-@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
-@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix ex:   <https://example.org/napoleon/> .
 
-ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter1 ;
-    OBI:0000293 ex:specimen1 ;
-    OBI:0000299 ex:glucoseDatum1 .
-
-ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
-    IAO:0000136 ex:specimen1 .
-    # no OBI:0001938 has value specification triple
-    # no datum status or reason about this datum
+ex:examination1 rdfs:comment "Invented archive record. No height entry." .
+    # no length measurement assay part, no measurement datum, no datum status

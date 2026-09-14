@@ -1,17 +1,19 @@
-# p09 lost in transit: the absence is recorded about the dataset, not the patient
+# p09 lost in transit: a unit mix-up during conversion, recorded about the dataset
 #
 # LinkML option: option4 out-of-band report.
 #
-# Patient record: identical in shape to p01 plus a value specification with a unit and no number.
-# It carries no reason. Separate records: a PROV-O ingest activity that used a source export and
-# generated the released dataset, and a SHACL validation report whose result names the value
-# specification node and the missing property, with a message saying the value existed upstream.
+# INVENTED PIPELINE. The archive's original entry reads 5 feet 2 inches in French measures, that
+# is 62 French inches. A conversion run (a PROV-O activity) multiplied 62 by the English inch,
+# 0.0254 m, giving 62 x 0.0254 = 1.5748 m, and wrote that into the released record. The original
+# entry is unchanged. A validation report flags the released value and names the activity.
 #
-# A consumer who reads only the patient record sees p01. One who joins the report can infer that
-# the sample is not at fault, the pipeline is, and the value may be recoverable from the source.
-# Closest OBO term for this state: GENEPIO:0001618 'missing' ("known to be recorded in the past
-# but the observed value cannot be located or retrieved"). It is deliberately not attached to
-# the patient record here.
+# This shows how a unit mix-up can produce a height that looks shorter than the 1.67 m estimate
+# for the same 5 feet 2 inches. These files make no claim about how the historical myth arose;
+# the only sourced statement on that is that James Gillray popularized it.
+#
+# A consumer who reads only the released record sees a complete p00-shaped value of 1.5748 m. One
+# who joins the report can infer that the value is a conversion error and that the source entry
+# should be consulted. The correct metre value has been lost in transit, not the record.
 #
 # PROV-O: https://www.w3.org/TR/prov-o/  SHACL: https://www.w3.org/TR/shacl/
 
@@ -21,41 +23,43 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix sh:   <http://www.w3.org/ns/shacl#> .
-@prefix ex:   <https://example.org/encounter/> .
+@prefix ex:   <https://example.org/napoleon/> .
 @prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
 @prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
 @prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
 @prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
 
-### Patient record (carries nothing about the loss)
+### Released record (carries nothing about the error)
 
-ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
-    BFO:0000050 ex:encounter1 ;
-    OBI:0000293 ex:specimen1 ;
-    OBI:0000299 ex:glucoseDatum1 .
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:examination1 ;
+    OBI:0000293 ex:napoleon ;
+    OBI:0000299 ex:heightDatum1 .
 
-ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
-    IAO:0000136 ex:specimen1 ;
+ex:heightDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:napoleonHeight ;
     OBI:0001938 ex:valueSpec1 .
 
 ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
-    IAO:0000039 UO:0010067 .
+    OBI:0001937 "1.5748"^^xsd:decimal ;
+    IAO:0000039 UO:0000008 ;
+    prov:wasGeneratedBy ex:conversionRun1 .
 
-### Dataset and pipeline records
+### Source entry and pipeline records
 
-ex:sourceExport1 a prov:Entity ;
-    rdfs:label "LIS export 2026-09-01 (contains glucose 95 mg/dL for specimen 1)" .
+ex:originalEntry1 a prov:Entity ;
+    rdfs:label "original archive entry: 5 feet 2 inches in French measures (62 French inches), unchanged (invented)" .
 
-ex:ingestRun1 a prov:Activity ;
-    rdfs:label "ingest run 1" ;
-    prov:used ex:sourceExport1 ;
+ex:conversionRun1 a prov:Activity ;
+    rdfs:label "unit conversion run 1 (invented)" ;
+    prov:used ex:originalEntry1 ;
     prov:startedAtTime "2026-09-02T09:00:00Z"^^xsd:dateTime ;
-    rdfs:comment "Unit conversion step had no mapping for the source unit string; the value was dropped." .
+    rdfs:comment "Treated 62 French inches as English inches: 62 x 0.0254 m = 1.5748 m." .
 
 ex:dataset1 a prov:Entity ;
-    rdfs:label "released encounter dataset 1" ;
-    prov:wasGeneratedBy ex:ingestRun1 ;
-    prov:wasDerivedFrom ex:sourceExport1 .
+    rdfs:label "released height dataset 1 (invented)" ;
+    prov:wasGeneratedBy ex:conversionRun1 ;
+    prov:wasDerivedFrom ex:originalEntry1 .
 
 ex:validationRun1 a prov:Activity ;
     prov:used ex:dataset1 .
@@ -68,6 +72,6 @@ ex:report1 a sh:ValidationReport ;
 ex:result1 a sh:ValidationResult ;
     sh:focusNode ex:valueSpec1 ;
     sh:resultPath OBI:0001937 ;
+    sh:value "1.5748"^^xsd:decimal ;
     sh:resultSeverity sh:Violation ;
-    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:resultMessage "Value present in ex:sourceExport1, dropped by ex:ingestRun1 (unit conversion)." .
+    sh:resultMessage "Value produced by ex:conversionRun1 using the English inch; ex:originalEntry1 is in French inches. The 1.67 m estimate is given for the same 5 feet 2 inches." .

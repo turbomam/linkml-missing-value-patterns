@@ -119,7 +119,8 @@ label `unknown`, and the Turtle writes the same reason as the IRI `NCIT:C157157`
 
 ### The union options validate, but do not leave YAML
 
-Options 1 and 1b are valid under `linkml-validate`, and no standard writer can serialize them.
+Options 1 and 1b are valid under `linkml-validate`, and no standard writer serializes them
+correctly. TSV and Turtle fail outright. JSON-LD writes RDF, but the RDF is wrong.
 
 - **TSV** fails with `Exception: Value of depth_m = {...}, which is not a dict`.
 - **Turtle** fails with `Unknown CURIE prefix: @base`. The RDF writer treats a value in a slot

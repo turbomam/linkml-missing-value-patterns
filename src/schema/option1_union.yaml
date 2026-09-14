@@ -12,9 +12,10 @@ description: >-
   measurement was expected.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 
-# ENVO, NCIT and SAMP are also declared here, not only in common.yaml, because the Python
-# generator behind linkml-convert drops prefixes declared only in an imported schema:
-# https://github.com/linkml/linkml/issues/3574
+# ENVO and NCIT are declared again here, although common.yaml already declares them, because
+# the Python generator behind linkml-convert drops prefixes declared only in an imported
+# schema: https://github.com/linkml/linkml/issues/3574
+# SAMP is declared only here. It expands the sample identifiers in the example data.
 prefixes:
   linkml: https://w3id.org/linkml/
   mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
@@ -30,7 +31,6 @@ imports:
 
 classes:
   BiosampleSet:
-    tree_root: true
     description: >-
       A list of samples. It exists so the examples can be written as one table or one graph,
       because linkml-convert needs a container class for tabular output.
@@ -38,6 +38,7 @@ classes:
       - samples
 
   Biosample:
+    tree_root: true
     description: >-
       A sample where each mandatory slot accepts either its real range or a reason for
       absence.

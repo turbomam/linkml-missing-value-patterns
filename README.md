@@ -98,8 +98,10 @@ This writes OWL for every schema, and each option's valid examples as one YAML f
 table and one Turtle graph, under `generated/`. It uses only the standard LinkML tools
 (`gen-owl`, `linkml-convert`).
 
-The union options (1 and 1b) validate, but cannot be written as TSV or RDF with linkml
-1.11.1. The script expects that, and exits non-zero if it ever stops being true.
+The union options (1 and 1b) validate, but cannot be written as TSV or Turtle with linkml
+1.11.1, and JSON-LD writes RDF for them that is wrong without reporting an error. The script
+expects the TSV and Turtle failures, and exits non-zero if either stops happening or fails for
+a different reason.
 `docs/findings.md` also covers what `gen-owl` does to the rules and to the union.
 
 ## What was measured, not assumed

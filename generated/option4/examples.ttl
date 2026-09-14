@@ -1,0 +1,35 @@
+@prefix ENVO: <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix SAMP: <https://w3id.org/turbomam/linkml-missing-value-patterns/sample/> .
+@prefix mvp: <https://w3id.org/turbomam/linkml-missing-value-patterns/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+SAMP:0401 a mvp:Biosample ;
+    mvp:depth_m "12.5"^^xsd:float ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+SAMP:0402 a mvp:Biosample ;
+    mvp:env_broad_scale ENVO:00000447 .
+
+SAMP:0403 a mvp:Biosample ;
+    mvp:env_broad_scale ENVO:00000873 .
+
+[] a mvp:Dataset ;
+    mvp:missing_value_reports [ a mvp:MissingValueReport ;
+            mvp:about_sample SAMP:0402 ;
+            mvp:about_slot "depth_m" ;
+            mvp:reason NCIT:C157157 ;
+            mvp:reason_detail NCIT:C185193 ;
+            mvp:reported_by "submitter" ;
+            mvp:reported_on "2026-08-31"^^xsd:date ],
+        [ a mvp:MissingValueReport ;
+            mvp:about_sample SAMP:0403 ;
+            mvp:about_slot "depth_m" ;
+            mvp:reason NCIT:C126101 ;
+            mvp:reason_detail NCIT:C67329 ;
+            mvp:reported_by "ingest pipeline" ;
+            mvp:reported_on "2026-08-31"^^xsd:date ] ;
+    mvp:samples SAMP:0401,
+        SAMP:0402,
+        SAMP:0403 .
+

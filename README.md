@@ -84,10 +84,24 @@ uv sync
 the result with the expectation in the filename: `valid_*` must pass, `invalid_*` must fail.
 It exits non-zero on any disagreement.
 
-All 23 files behaved as their names claim when this was last run, on 2026-09-02 against
+All 23 files behaved as their names claim when this was last run, on 2026-09-14 against
 linkml 1.11.1. Every measured claim in this repository comes from that version, and `uv.lock`
 is committed so you get the same one. If you reproduce against a different release and get a
 different answer, that difference is worth reporting.
+
+## The same data as OWL, TSV and RDF
+
+```bash
+./convert.sh
+```
+
+This writes OWL for every schema, and each option's valid examples as one YAML file, one TSV
+table and one Turtle graph, under `generated/`. It uses only the standard LinkML tools
+(`gen-owl`, `linkml-convert`).
+
+The union options (1 and 1b) validate, but cannot be written as TSV or RDF with linkml
+1.11.1. The script expects that, and exits non-zero if it ever stops being true.
+`docs/findings.md` also covers what `gen-owl` does to the rules and to the union.
 
 ## What was measured, not assumed
 

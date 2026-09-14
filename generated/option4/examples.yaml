@@ -1,0 +1,21 @@
+samples:
+- sample_id: SAMP:0403
+  env_broad_scale: freshwater biome
+- sample_id: SAMP:0401
+  depth_m: 12.5
+  env_broad_scale: terrestrial biome
+- sample_id: SAMP:0402
+  env_broad_scale: marine biome
+missing_value_reports:
+- about_sample: SAMP:0403
+  about_slot: depth_m
+  reason: not available
+  reason_detail: source data not available
+  reported_by: ingest pipeline
+  reported_on: '2026-08-31'
+- about_sample: SAMP:0402
+  about_slot: depth_m
+  reason: unknown
+  reason_detail: not recorded
+  reported_by: submitter
+  reported_on: '2026-08-31'

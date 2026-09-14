@@ -1,0 +1,12 @@
+@prefix ENVO: <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix SAMP: <https://w3id.org/turbomam/linkml-missing-value-patterns/sample/> .
+@prefix mvp: <https://w3id.org/turbomam/linkml-missing-value-patterns/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+SAMP:0001 a mvp:Biosample ;
+    mvp:depth_m "12.5"^^xsd:float ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+[] a mvp:BiosampleSet ;
+    mvp:samples SAMP:0001 .
+

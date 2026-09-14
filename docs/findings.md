@@ -98,3 +98,85 @@ Unavailable `C150903`, Source Data Not Available `C67329`.
 `OBI:0002199` "reason for lack of data item" was considered and not used. It has four
 descendants (`OBI:0002200` cannot be assessed determination, `OBI:0002202` GX, `OBI:0002203`
 pTX, `OBI:0002204` pNX) and all of them are cancer staging.
+
+## Conversion to OWL, TSV and RDF
+
+Run on 2026-09-14 with linkml 1.11.1 and linkml-runtime 1.11.1, using `./convert.sh`. It writes
+OWL for every schema, and each option's valid examples as one YAML file, one TSV table and one
+Turtle graph, all under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
+
+| Option | OWL (`gen-owl`) | TSV | RDF (Turtle) |
+|---|---|---|---|
+| 0 strict | yes | yes | yes |
+| 1 union | yes, but the numeric union is lost | no | no |
+| 1b union | same as option 1 | no | no |
+| 2 reified | yes | yes, the value object flattens to `depth_*` columns | yes, the value node carries the reason |
+| 3 sibling | yes | yes, one extra column | yes |
+| 4 out-of-band | yes | yes, as two tables | yes |
+
+Side by side, options 2 and 3 show why `meaning:` matters. The TSV writes the reason as the
+label `unknown`, and the Turtle writes the same reason as the IRI `NCIT:C157157`.
+
+### The union options validate, but do not leave YAML
+
+Options 1 and 1b are valid under `linkml-validate`, and no standard writer can serialize them.
+
+- **TSV** fails with `Exception: Value of depth_m = {...}, which is not a dict`.
+- **Turtle** fails with `Unknown CURIE prefix: @base`. The RDF writer treats a value in a slot
+  declared `range: Any` as a reference to another object.
+- **JSON-LD** (`linkml-convert -t json-ld`, then parsing the file with rdflib) raises no error,
+  but the RDF is wrong: `12.5` gets the datatype `mvp:@id`, and the reason strings become
+  `file://` IRIs. That is the worse result, because nothing reports it.
+
+This is the tooling version of a real constraint. In OWL 2 DL, one property cannot be both a
+datatype property (a number) and an object property (a term IRI).
+
+### What `gen-owl` does with these schemas
+
+- **The numeric union disappears.** In option 1, `depth_m` stays an `owl:DatatypeProperty`
+  with range `xsd:float`. The branch that allows a reason term is dropped, with only the log
+  line `Ambiguous type for: depth_m`. ROBOT's OWL 2 DL check then reports
+  `Cannot pun between properties` for `depth_m`. The union of two enums on `env_broad_scale`
+  does survive, as `owl:unionOf`.
+- **Rules become class axioms, but `value_presence` is ignored.** The string `value_presence`
+  appears nowhere in `linkml/generators/owlgen.py` in 1.11.1.
+  - Every rule condition becomes `someValuesFrom xsd:string`, whether it says `PRESENT` or
+    `ABSENT` and whatever the slot's range is.
+  - So option 3's two depth rules, "absent requires a reason" and "present forbids a reason",
+    both come out as the same axiom:
+    `Biosample and (depth_m some xsd:string) SubClassOf (depth_m_missing_reason some xsd:string)`.
+    Read literally, that says a present depth requires a reason, which contradicts the schema.
+  - `depth_m` is a float, so a real value never matches `xsd:string`. In practice the axiom
+    constrains nothing.
+  - The same axioms apply data-property syntax to object properties. That is why ROBOT reports
+    punning errors in options 2 and 3.
+  - Upstream searches for "owlgen rules", "gen-owl preconditions", "value_presence owl" and
+    "owlgen value_presence" found no open issue.
+- **An external term gains a parent.** Each permissible value with a `meaning:` becomes an
+  `owl:Class` at that IRI, asserted as a subclass of the enum:
+  `NCIT_C48660 rdfs:subClassOf mvp:MissingValueReasonEnum`. Merging this OWL with NCIT adds a
+  parent to an NCIT term. `other` has no `meaning:`, so it gets the local IRI
+  `.../MissingValueReasonEnum#other`.
+- **None of the six OWL files is in the OWL 2 DL profile.** The findings common to all six are
+  undeclared annotation properties (`dcterms:title`, `skos:definition`,
+  `linkml:permissible_values`). Option 4 also uses `xsd:date` without declaring it. The
+  punning errors above are the only findings specific to missing data.
+
+### Two tooling problems worked around in this repository
+
+- **Prefixes from imports are dropped.** The Python code that `linkml-convert` generates
+  ignores prefixes declared only in an imported schema, and fails with
+  `NameError: name 'ENVO' is not defined`. This is
+  https://github.com/linkml/linkml/issues/3574 (open). Each option schema therefore repeats
+  the ENVO, NCIT and SAMP prefixes.
+- **Imports are resolved against the working directory.** Run from the repository root,
+  `linkml-convert` fails with
+  `FileNotFoundError: .../linkml-missing-value-patterns/common.yaml` for Turtle, JSON and YAML
+  output alike. `linkml-validate` resolves the same import correctly from the same directory.
+  Upstream searches for this found no issue. `convert.sh` runs the converter from `src/schema`.
+
+### Why options 0 to 3 gained a `BiosampleSet` class
+
+`linkml-convert` writes TSV only from a container class, with `--index-slot` naming the list
+slot. `BiosampleSet` holds a list of samples and is otherwise unused. `run_checks.sh` still
+validates each example against `Biosample` directly.

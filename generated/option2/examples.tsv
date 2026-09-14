@@ -1,0 +1,3 @@
+sample_id	env_broad_scale	depth_has_numeric_value	depth_has_unit	depth_reason_for_absence	depth_reason_detail	depth_reason_note
+SAMP:0201	terrestrial biome	12.5	m			
+SAMP:0202	terrestrial biome		m	not available	masked data	Exact depth withheld under the site data agreement.

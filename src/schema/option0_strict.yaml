@@ -8,9 +8,15 @@ description: >-
   schemas do today, and it is why missing-value codes end up smuggled into free-text slots.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 
+# ENVO, NCIT and SAMP are also declared here, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
 prefixes:
   linkml: https://w3id.org/linkml/
   mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  ENVO: http://purl.obolibrary.org/obo/ENVO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  SAMP: https://w3id.org/turbomam/linkml-missing-value-patterns/sample/
 default_prefix: mvp
 default_range: string
 
@@ -19,8 +25,15 @@ imports:
   - common
 
 classes:
-  Biosample:
+  BiosampleSet:
     tree_root: true
+    description: >-
+      A list of samples. It exists so the examples can be written as one table or one graph,
+      because linkml-convert needs a container class for tabular output.
+    slots:
+      - samples
+
+  Biosample:
     description: A sample whose depth and broad-scale environment are both mandatory.
     slots:
       - sample_id
@@ -31,3 +44,10 @@ classes:
         required: true
       env_broad_scale:
         required: true
+
+slots:
+  samples:
+    range: Biosample
+    multivalued: true
+    inlined: true
+    inlined_as_list: true

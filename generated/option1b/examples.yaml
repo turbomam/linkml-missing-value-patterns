@@ -1,0 +1,7 @@
+samples:
+- sample_id: SAMP:0112
+  depth_m: not applicable
+  env_broad_scale: terrestrial biome
+- sample_id: SAMP:0111
+  depth_m: 12.5
+  env_broad_scale: terrestrial biome

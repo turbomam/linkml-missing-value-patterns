@@ -1,0 +1,216 @@
+@prefix ENVO: <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix mvp: <https://w3id.org/turbomam/linkml-missing-value-patterns/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+mvp:BiosampleSet a owl:Class ;
+    rdfs:label "BiosampleSet" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mvp:Biosample ;
+            owl:onProperty mvp:samples ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mvp:samples ] ;
+    skos:definition "A list of samples. It exists so the examples can be written as one table or one graph, because linkml-convert needs a container class for tabular output." ;
+    skos:inScheme mvp:option1 .
+
+mvp:option1.owl.ttl a owl:Ontology ;
+    rdfs:label "option1_union" ;
+    dcterms:license "https://creativecommons.org/publicdomain/zero/1.0/" ;
+    dcterms:title "Option 1: union of the real range with a reason value set" ;
+    skos:definition """The slot stays required. Its range becomes "a real value, or a declared reason". This is the shape sketched by cmungall on https://github.com/linkml/linkml/issues/178 in 2022 and the shape MIxS implies but never wires up with InsdcMissingValueEnum.
+What you gain: one slot, one required flag, and a submitter can always fill it in honestly. What you pay: the slot is no longer strongly typed. Every consumer has to branch on the value's type, the SQL column widens to text, and the RDF object is a reason class where a measurement was expected.""" .
+
+mvp:reason_detail a owl:ObjectProperty ;
+    rdfs:label "reason_detail" ;
+    rdfs:range mvp:DetailedMissingValueReasonEnum ;
+    skos:definition "A finer-grained reason for absence, when one is known." ;
+    skos:inScheme mvp:common .
+
+mvp:reason_note a owl:DatatypeProperty ;
+    rdfs:label "reason_note" ;
+    rdfs:range xsd:string ;
+    skos:definition "Free text for anything the reason value sets cannot carry." ;
+    skos:inScheme mvp:common .
+
+ENVO:00000446 a owl:Class ;
+    rdfs:label "terrestrial biome" ;
+    rdfs:subClassOf mvp:EnvBroadScaleEnum .
+
+ENVO:00000447 a owl:Class ;
+    rdfs:label "marine biome" ;
+    rdfs:subClassOf mvp:EnvBroadScaleEnum .
+
+ENVO:00000873 a owl:Class ;
+    rdfs:label "freshwater biome" ;
+    rdfs:subClassOf mvp:EnvBroadScaleEnum .
+
+NCIT:C126101 a owl:Class ;
+    rdfs:label "not available" ;
+    rdfs:subClassOf mvp:MissingValueReasonEnum ;
+    skos:definition "A value may have been determined, but it is not available to us. Example: a depth withheld because publishing it would identify a protected site." .
+
+NCIT:C150903 a owl:Class ;
+    rdfs:label "temporarily unavailable" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C150904 a owl:Class ;
+    rdfs:label "masked data" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C157157 a owl:Class ;
+    rdfs:label "unknown" ;
+    rdfs:subClassOf mvp:MissingValueReasonEnum ;
+    skos:definition "A value was never determined. Example: a legacy sample whose depth was not recorded at collection time." .
+
+NCIT:C177690 a owl:Class ;
+    rdfs:label "insufficient quantity" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C177691 a owl:Class ;
+    rdfs:label "insufficient quality" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C185193 a owl:Class ;
+    rdfs:label "not recorded" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C48657 a owl:Class ;
+    rdfs:label "cannot be assessed" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C48660 a owl:Class ;
+    rdfs:label "not applicable" ;
+    rdfs:subClassOf mvp:MissingValueReasonEnum ;
+    skos:definition "It does not make sense for there to be a value in this field. Example: a sampling depth for a synthetic construct." .
+
+NCIT:C49484 a owl:Class ;
+    rdfs:label "not done" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C51024 a owl:Class ;
+    rdfs:label "response declined" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C67329 a owl:Class ;
+    rdfs:label "source data not available" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+NCIT:C80217 a owl:Class ;
+    rdfs:label "not asked" ;
+    rdfs:subClassOf mvp:DetailedMissingValueReasonEnum .
+
+mvp:Any a owl:Class ;
+    rdfs:label "Any" ;
+    skos:definition "The LinkML \"any\" class. Required as the declared range of a slot whose real range is given by an any_of expression. See https://linkml.io/linkml/schemas/advanced.html" ;
+    skos:exactMatch linkml:Any ;
+    skos:inScheme mvp:common .
+
+mvp:Biosample a owl:Class ;
+    rdfs:label "Biosample" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mvp:env_broad_scale ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mvp:sample_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mvp:depth_m ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mvp:env_broad_scale ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mvp:sample_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mvp:sample_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mvp:depth_m ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ owl:intersectionOf ( [ a rdfs:Datatype ;
+                                owl:unionOf ( xsd:float mvp:MissingValueReasonEnum ) ] mvp:Any ) ] ;
+            owl:onProperty mvp:depth_m ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ owl:intersectionOf ( [ owl:unionOf ( mvp:EnvBroadScaleEnum mvp:MissingValueReasonEnum ) ] mvp:Any ) ] ;
+            owl:onProperty mvp:env_broad_scale ] ;
+    skos:definition "A sample where each mandatory slot accepts either its real range or a reason for absence." ;
+    skos:inScheme mvp:option1 .
+
+<https://w3id.org/turbomam/linkml-missing-value-patterns/MissingValueReasonEnum#other> a owl:Class ;
+    rdfs:label "other" ;
+    rdfs:subClassOf mvp:MissingValueReasonEnum ;
+    skos:definition "A value was determined and falls outside the allowed value set. Example: an environment that no term in the value set covers." .
+
+mvp:samples a owl:ObjectProperty ;
+    rdfs:label "samples" ;
+    rdfs:range mvp:Biosample ;
+    skos:inScheme mvp:option1 .
+
+mvp:depth_m a owl:DatatypeProperty ;
+    rdfs:label "depth_m" ;
+    rdfs:range xsd:float ;
+    skos:definition "Depth below the surface, in meters. The numeric exemplar." ;
+    skos:inScheme mvp:common .
+
+mvp:env_broad_scale a owl:ObjectProperty ;
+    rdfs:label "env_broad_scale" ;
+    rdfs:range mvp:EnvBroadScaleEnum ;
+    skos:definition "Broad-scale environmental context. The categorical exemplar, ranged over an ontology-backed value set rather than a string." ;
+    skos:inScheme mvp:common .
+
+mvp:sample_id a owl:DatatypeProperty ;
+    rdfs:label "sample_id" ;
+    rdfs:range xsd:string ;
+    skos:definition "Local identifier for the sample." ;
+    skos:inScheme mvp:common .
+
+mvp:EnvBroadScaleEnum a owl:Class ;
+    rdfs:label "EnvBroadScaleEnum" ;
+    owl:unionOf ( ENVO:00000446 ENVO:00000447 ENVO:00000873 ) ;
+    skos:definition "A deliberately tiny stand-in for the MIxS env_broad_scale value set. Real values are ENVO classes, which is what makes a string sentinel a type violation here." ;
+    skos:inScheme mvp:common ;
+    linkml:permissible_values ENVO:00000446,
+        ENVO:00000447,
+        ENVO:00000873 .
+
+mvp:MissingValueReasonEnum a owl:Class ;
+    rdfs:label "MissingValueReasonEnum" ;
+    rdfs:seeAlso <https://www.insdc.org/technical-specifications/missing-value-reporting/> ;
+    owl:unionOf ( NCIT:C48660 NCIT:C157157 NCIT:C126101 <https://w3id.org/turbomam/linkml-missing-value-patterns/MissingValueReasonEnum#other> ) ;
+    skos:definition "Coarse reasons a value is absent. Four distinctions, which is the number both INSDC and NCIT converge on: the field does not apply, no value was ever determined, a value exists but is not available to us, and a value exists but falls outside the allowed value set." ;
+    skos:inScheme mvp:common ;
+    skos:note "\"other\" has no meaning. NCIT:C17649 \"Other\" is also under General Qualifier rather than Missing Value Reason, so that branch has no term for it. This is a real gap in the target vocabulary, not an oversight here.",
+        "\"unknown\" maps to NCIT:C157157 \"Indeterminate or Unknown\" rather than NCIT:C17998 \"Unknown\", because C17998 sits under NCIT:C27993 \"General Qualifier\" and not under Missing Value Reason. Checked against the OLS API on 2026-08-31.",
+        "INSDC's list maps onto these four as follows: \"not applicable\" stays not applicable; \"missing\" and \"not collected\" become unknown; \"not provided\" and \"restricted access\" both become not available. That last pair is a genuine loss, because whether to ask again depends on which one it was. If that distinction matters to you, use DetailedMissingValueReasonEnum alongside this one.",
+        "The meanings point at children of NCIT:C48655 \"Missing Value Reason\", which has 38 children and is the largest ready-made value set for this purpose. It is a flat NCIT branch rather than an OBO-Foundry upper structure, so treat these as interim mappings. An OBO-side hierarchy for incomplete data records is under discussion as of 2026-08." ;
+    linkml:permissible_values NCIT:C126101,
+        NCIT:C157157,
+        NCIT:C48660,
+        <https://w3id.org/turbomam/linkml-missing-value-patterns/MissingValueReasonEnum#other> .
+
+mvp:DetailedMissingValueReasonEnum a owl:Class ;
+    rdfs:label "DetailedMissingValueReasonEnum" ;
+    owl:unionOf ( NCIT:C80217 NCIT:C49484 NCIT:C185193 NCIT:C48657 NCIT:C177690 NCIT:C177691 NCIT:C51024 NCIT:C150904 NCIT:C150903 NCIT:C67329 ) ;
+    skos:definition "Finer reasons, for use alongside the coarse enum when the specific cause matters. Every value here is a verified child of NCIT:C48655 \"Missing Value Reason\", checked against the OLS API on 2026-08-31." ;
+    skos:inScheme mvp:common ;
+    linkml:permissible_values NCIT:C150903,
+        NCIT:C150904,
+        NCIT:C177690,
+        NCIT:C177691,
+        NCIT:C185193,
+        NCIT:C48657,
+        NCIT:C49484,
+        NCIT:C51024,
+        NCIT:C67329,
+        NCIT:C80217 .
+
+

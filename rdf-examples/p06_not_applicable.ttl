@@ -1,0 +1,59 @@
+# p06 not applicable: class-level statement versus per-record code
+#
+# LinkML option: option3 sibling, via a value_presence: ABSENT rule (docs/crosswalk.md, cause a)
+# for the class-level form; the per-record GENEPIO form is what options 1, 1b, 2 and 3 carry.
+#
+# The archive (invented) holds a lock of hair attributed to Napoleon. Standing height cannot be
+# measured on a lock of hair.
+#
+# Class-level: ex:HairLockRelicExamination is a planned process that has exactly zero length
+# measurement assays as parts. Every examination typed this way inherits the absence; nothing is
+# written per record. A reasoner can infer that a height assay here would be an error, and ROBOT
+# shows that asserting one makes the graph inconsistent (p06_not_applicable_contradiction.ttl).
+# The restriction uses the general OBI:0003817 class, so it also excludes other length
+# measurements of the relic; OBI has no narrower height assay class to restrict on.
+#
+# Per-record: a datum node is minted only to carry a GENEPIO:0001619 'not applicable' status.
+# A consumer can find it by query, but the same fact is repeated once per record, and a datum is
+# asserted to exist for a measurement that does not apply.
+#
+# OWL 2 DL note (same as the template): 'has part' is transitive in RO, which makes it
+# non-simple, and OWL 2 DL forbids cardinality restrictions on non-simple properties. base.ttl
+# does not copy the transitivity axiom. Merged with RO, write the restriction as the p10 form.
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/napoleon/> .
+@prefix BFO:     <http://purl.obolibrary.org/obo/BFO_> .
+@prefix RO:      <http://purl.obolibrary.org/obo/RO_> .
+@prefix IAO:     <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:     <http://purl.obolibrary.org/obo/OBI_> .
+@prefix COB:     <http://purl.obolibrary.org/obo/COB_> .
+@prefix GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_> .
+
+### Class-level form
+
+ex:HairLockRelicExamination a owl:Class ;
+    rdfs:label "hair lock relic examination" ;
+    rdfs:subClassOf COB:0000082 ,
+        [ a owl:Restriction ;
+          owl:onProperty BFO:0000051 ;
+          owl:qualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+          owl:onClass OBI:0003817 ] .
+
+ex:hairLock1 a owl:NamedIndividual ;
+    rdfs:label "lock of hair attributed to Napoleon (invented archive item)" .
+
+ex:relicExam1 a owl:NamedIndividual , ex:HairLockRelicExamination ;
+    rdfs:label "relic examination 1 (invented archive record)" ;
+    RO:0000057 ex:hairLock1 .
+
+### Per-record form, for contrast
+
+ex:heightDatum2 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:hairLock1 .
+
+ex:status6 a owl:NamedIndividual , GENEPIO:0001619 ;
+    IAO:0000136 ex:heightDatum2 .

@@ -1,0 +1,43 @@
+# p10 negation: "this examination has no height measurement"
+#
+# LinkML option: none.
+#
+# Two OWL forms, both about examination1 in base.ttl:
+#   1. Class membership in a complement, the OWL analogue of Wikidata's "no value":
+#      examination1 is a member of not (has part some 'length measurement assay').
+#   2. A NegativeObjectPropertyAssertion: examination1 does not have ex:heightAssay1 as a part.
+#      This is much weaker: it denies one named individual and says nothing about others.
+#
+# NegativeDataPropertyAssertion does not fit this sentence: it denies one literal (for example,
+# "valueSpec1 does not have numeric value 1.67"), which presupposes a value specification.
+#
+# Form 1 uses the general OBI:0003817 class, so it also denies any other length measurement in
+# this examination; OBI has no narrower height assay class.
+#
+# A consumer with a reasoner can infer that any assertion of a length measurement assay as part
+# of examination1 contradicts the record: see p10_negation_contradiction.ttl. A SPARQL consumer has
+# to read the restriction structure.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/napoleon/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+
+# Form 1
+ex:examination1 a
+    [ a owl:Class ;
+      owl:complementOf
+        [ a owl:Restriction ;
+          owl:onProperty BFO:0000051 ;
+          owl:someValuesFrom OBI:0003817 ] ] .
+
+# Form 2
+ex:heightAssay1 a owl:NamedIndividual .
+
+[] a owl:NegativePropertyAssertion ;
+    owl:sourceIndividual ex:examination1 ;
+    owl:assertionProperty BFO:0000051 ;
+    owl:targetIndividual ex:heightAssay1 .

@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
+slides/*.html
+slides/*.pdf
+.demo-build/

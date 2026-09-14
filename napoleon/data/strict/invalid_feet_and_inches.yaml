@@ -1,0 +1,4 @@
+# Syntactically incorrect: feet and inches typed into a float field.
+record_id: REC:0003
+height_m: "5'2\""
+source_type: portrait estimate

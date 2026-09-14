@@ -1,0 +1,44 @@
+# p03 reason as a term, in the value position
+#
+# LinkML option: option1 union (and option1b): the slot holds either a value or a reason term.
+#
+# An invented birth record (ex:birthRecord1) has a height datum whose 'has value specification'
+# points at an instance of GENEPIO:0001620 'not collected' instead of at a scalar value
+# specification: height at birth was not collected.
+#
+# A consumer can infer that no value was determined and why, as a resolvable class. They cannot
+# rely on the node being a value specification: it is a datum status (a data entity), yet OBI
+# 2026-07-27 declares the range of OBI:0001938 as OBI:0001933 'value specification', so a
+# reasoner will classify the reason as a value specification. No disjointness prevents that, so
+# it is a category error rather than an inconsistency.
+#
+# As in the template, the assay individual is kept so the shape matches p00. Whether a process
+# should be asserted at all when nothing was collected is itself a modelling choice.
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/napoleon/> .
+@prefix BFO:     <http://purl.obolibrary.org/obo/BFO_> .
+@prefix RO:      <http://purl.obolibrary.org/obo/RO_> .
+@prefix IAO:     <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:     <http://purl.obolibrary.org/obo/OBI_> .
+@prefix OGMS:    <http://purl.obolibrary.org/obo/OGMS_> .
+@prefix GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_> .
+
+ex:birthRecord1 a owl:NamedIndividual , OGMS:0000097 ;
+    rdfs:label "birth record 1 (invented archive record)" ;
+    RO:0000057 ex:napoleon .
+
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:birthRecord1 ;
+    OBI:0000293 ex:napoleon ;
+    OBI:0000299 ex:heightDatum1 .
+
+ex:heightDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    rdfs:comment "height at birth" ;
+    IAO:0000136 ex:napoleonHeight ;
+    OBI:0001938 ex:reason1 .               # reason where a value specification belongs
+
+ex:reason1 a owl:NamedIndividual , GENEPIO:0001620 .

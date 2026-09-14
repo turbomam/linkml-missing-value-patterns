@@ -1,0 +1,10 @@
+# The value existed. Read as English inches, 62 inches is 1.5748 m; a range check dropped it.
+records:
+  - record_id: REC:0501
+    source_type: physical measurement
+missing_value_reports:
+  - about_record: REC:0501
+    about_slot: height_m
+    report_reason: lost in transit
+    reason_note: 5 pieds 2 pouces converted as English inches (1.5748 m), then rejected by a range check.
+    reported_by: ingest pipeline

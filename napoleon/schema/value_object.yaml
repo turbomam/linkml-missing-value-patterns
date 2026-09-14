@@ -1,0 +1,67 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/value_object
+name: value_object
+title: "value-object: a height object holding a number or a reason"
+description: >-
+  height is required and is always a HeightMeasurement. The object holds a numeric value or a reason for its absence, never both and never neither, so the slot keeps one strong range.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - common
+
+classes:
+  HeightRecordSet:
+    description: A list of records, so the examples can be written as one table.
+    slots: [records]
+  HeightRecord:
+    tree_root: true
+    slots: [record_id, height, source_type]
+    slot_usage:
+      height:
+        required: true
+  HeightMeasurement:
+    slots: [has_numeric_value, has_unit, reason, reason_note]
+    rules:
+      - title: a_value_forbids_a_reason
+        preconditions:
+          slot_conditions:
+            has_numeric_value:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            reason:
+              value_presence: ABSENT
+      - title: no_value_requires_a_reason
+        preconditions:
+          slot_conditions:
+            has_numeric_value:
+              value_presence: ABSENT
+        postconditions:
+          slot_conditions:
+            reason:
+              value_presence: PRESENT
+slots:
+  records:
+    range: HeightRecord
+    multivalued: true
+    inlined_as_list: true
+  height:
+    range: HeightMeasurement
+    inlined: true
+  has_numeric_value:
+    range: float
+  has_unit:
+    description: The unit, meaningful even when there is no number.
+    range: string
+  reason:
+    range: InsdcMissingValueEnum

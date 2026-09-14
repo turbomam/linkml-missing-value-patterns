@@ -1,0 +1,4 @@
+# "short" is neither a number nor an INSDC term.
+record_id: REC:0104
+height_m: short
+source_type: memoir

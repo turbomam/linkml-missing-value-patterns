@@ -1,0 +1,30 @@
+# p06_not_applicable: not applicable, both as a class-level zero cardinality and as a per-record GENEPIO status
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX BFO: <http://purl.obolibrary.org/obo/BFO_>
+PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
+PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
+PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
+PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
+PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
+PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
+
+SELECT ?kind ?subject ?cls ?excludedType WHERE {
+  {
+    BIND("class-level" AS ?kind)
+    ?cls rdfs:subClassOf ?r .
+    ?r owl:onProperty BFO:0000051 ; owl:onClass ?excludedType .
+    { ?r owl:qualifiedCardinality ?n } UNION { ?r owl:maxQualifiedCardinality ?n }
+    FILTER(xsd:integer(?n) = 0)
+    ?subject a ?cls .
+  } UNION {
+    BIND("per-record" AS ?kind)
+    ?status a GENEPIO:0001619 ; IAO:0000136 ?subject .
+  }
+}

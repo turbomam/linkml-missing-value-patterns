@@ -1,0 +1,12 @@
+Prefix(:=<https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+
+# Every MeasuredPerson has at least one height. napoleon is one, and no height is asserted.
+# HermiT calls this consistent: under the open-world assumption the height exists and was not written down.
+Ontology(<https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/required_height>
+Declaration(Class(:MeasuredPerson))
+Declaration(DataProperty(:heightInMetres))
+Declaration(NamedIndividual(:napoleon))
+SubClassOf(:MeasuredPerson DataMinCardinality(1 :heightInMetres))
+ClassAssertion(:MeasuredPerson :napoleon)
+)

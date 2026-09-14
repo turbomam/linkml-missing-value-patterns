@@ -1,0 +1,189 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/common
+name: common
+title: "Shared slots and value sets for the Napoleon height examples"
+description: >-
+  Napoleon Bonaparte's height, recorded, disputed, converted and lost. The records in this folder are invented for illustration; the sourced facts are only that he was estimated at 5 feet 2 inches in pre-metric French measures, about 1.67 m, that other historians say 1.70 m, and that the cartoonist James Gillray popularized the myth that he was short (English Wikipedia, Napoleon complex, read 2026-09-14).
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+
+classes:
+  Any:
+    class_uri: linkml:Any
+    description: The declared range of a slot whose real range is an any_of or exactly_one_of expression.
+
+slots:
+  record_id:
+    identifier: true
+    range: string
+  height_m:
+    description: Standing height, in metres.
+    range: float
+  source_type:
+    description: Where the height came from.
+    range: SourceTypeEnum
+  reason_note:
+    description: Free text for anything the reason value sets cannot carry.
+    range: string
+
+enums:
+  SourceTypeEnum:
+    description: Where a height value came from. The categorical example slot.
+    permissible_values:
+      physical measurement:
+      memoir:
+      portrait estimate:
+
+  InsdcMissingValueEnum:
+    description: >-
+      The INSDC missing value reporting terms (https://www.insdc.org/technical-specifications/missing-value-reporting/).
+      Top and lower level terms point at their GENEPIO datum status terms. Reporting-level terms have no
+      ontology term to point at.
+    comments:
+      - >-
+        Control sample and sample group are written here under "not applicable", as the INSDC table
+        files them. The INSDC usage text prefixes every reporting-level term with "missing: ", and NCBI
+        BioSample submitters follow it: "missing: control sample" 37,073 values against
+        "not applicable: control sample" 483 (local copy, submissions through 2026-05-10).
+    permissible_values:
+      not applicable:
+        meaning: GENEPIO:0001619
+      "not applicable: control sample":
+        is_a: not applicable
+        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+      "not applicable: sample group":
+        is_a: not applicable
+        description: The record pools several relic hair locks with no single origin.
+      missing:
+        meaning: GENEPIO:0001618
+      not collected:
+        is_a: missing
+        meaning: GENEPIO:0001620
+      not provided:
+        is_a: missing
+        meaning: GENEPIO:0001668
+        description: A value may be given later.
+      restricted access:
+        is_a: missing
+        meaning: GENEPIO:0001810
+      "missing: synthetic construct":
+        is_a: not collected
+      "missing: lab stock":
+        is_a: not collected
+      "missing: third party data":
+        is_a: not collected
+      "missing: data agreement established pre-2023":
+        is_a: not provided
+      "missing: endangered species":
+        is_a: restricted access
+      "missing: human-identifiable":
+        is_a: restricted access
+
+  AskedReasonEnum:
+    description: The answers INSDC has no term for, where somebody was asked.
+    permissible_values:
+      asked, answer unknown:
+        meaning: NCIT:C79729
+        description: A witness was asked and answered "unknown". Not the same as a blank.
+      asked, declined:
+        meaning: NCIT:C51024
+        description: The person asked declined to answer, or declined to be measured.
+
+  HeightReasonEnum:
+    description: >-
+      The INSDC terms and the two asked-and-answered reasons in one value set, so a reason column keeps
+      a single range and can still be written as a table. A slot ranged over a union of two enums cannot.
+    permissible_values:
+      not applicable:
+        meaning: GENEPIO:0001619
+      "not applicable: control sample":
+        is_a: not applicable
+        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+      "not applicable: sample group":
+        is_a: not applicable
+        description: The record pools several relic hair locks with no single origin.
+      missing:
+        meaning: GENEPIO:0001618
+      not collected:
+        is_a: missing
+        meaning: GENEPIO:0001620
+      not provided:
+        is_a: missing
+        meaning: GENEPIO:0001668
+        description: A value may be given later.
+      restricted access:
+        is_a: missing
+        meaning: GENEPIO:0001810
+      "missing: synthetic construct":
+        is_a: not collected
+      "missing: lab stock":
+        is_a: not collected
+      "missing: third party data":
+        is_a: not collected
+      "missing: data agreement established pre-2023":
+        is_a: not provided
+      "missing: endangered species":
+        is_a: restricted access
+      "missing: human-identifiable":
+        is_a: restricted access
+
+      asked, answer unknown:
+        meaning: NCIT:C79729
+        description: A witness was asked and answered "unknown". Not the same as a blank.
+      asked, declined:
+        meaning: NCIT:C51024
+        description: The person asked declined to answer, or declined to be measured.
+
+  ReportReasonEnum:
+    description: >-
+      Reasons a separate report can give: the INSDC terms plus two that describe the dataset or the
+      pipeline rather than the person. One value set, so the reports can be written as a table.
+    permissible_values:
+      lost in transit:
+        description: A value existed and a processing step lost it. Neither INSDC nor GENEPIO has a term for this.
+      in process:
+        meaning: GENEPIO:0001662
+      not applicable:
+        meaning: GENEPIO:0001619
+      "not applicable: control sample":
+        is_a: not applicable
+        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+      "not applicable: sample group":
+        is_a: not applicable
+        description: The record pools several relic hair locks with no single origin.
+      missing:
+        meaning: GENEPIO:0001618
+      not collected:
+        is_a: missing
+        meaning: GENEPIO:0001620
+      not provided:
+        is_a: missing
+        meaning: GENEPIO:0001668
+        description: A value may be given later.
+      restricted access:
+        is_a: missing
+        meaning: GENEPIO:0001810
+      "missing: synthetic construct":
+        is_a: not collected
+      "missing: lab stock":
+        is_a: not collected
+      "missing: third party data":
+        is_a: not collected
+      "missing: data agreement established pre-2023":
+        is_a: not provided
+      "missing: endangered species":
+        is_a: restricted access
+      "missing: human-identifiable":
+        is_a: restricted access
+

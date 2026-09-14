@@ -1,0 +1,24 @@
+# p05_failed_assay: failed planned processes with no specified output, their intended type and participants
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX BFO: <http://purl.obolibrary.org/obo/BFO_>
+PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
+PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
+PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
+PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
+PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
+PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
+
+SELECT ?process ?intendedType ?participant ?exam WHERE {
+  ?process a COB:0000083 .
+  FILTER NOT EXISTS { ?process OBI:0000299 ?out }
+  OPTIONAL { ?process COB:0000085 ?intendedType }
+  OPTIONAL { ?process RO:0000057 ?participant }
+  OPTIONAL { ?process BFO:0000050 ?exam }
+}

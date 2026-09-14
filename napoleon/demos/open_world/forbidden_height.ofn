@@ -1,0 +1,13 @@
+Prefix(:=<https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+
+# A HairLock has no height. lock1 is one, and has a height. HermiT calls this inconsistent:
+# OWL can refuse a value that must not be there.
+Ontology(<https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/forbidden_height>
+Declaration(Class(:HairLock))
+Declaration(DataProperty(:heightInMetres))
+Declaration(NamedIndividual(:lock1))
+SubClassOf(:HairLock DataMaxCardinality(0 :heightInMetres))
+ClassAssertion(:HairLock :lock1)
+DataPropertyAssertion(:heightInMetres :lock1 "1.67"^^xsd:decimal)
+)

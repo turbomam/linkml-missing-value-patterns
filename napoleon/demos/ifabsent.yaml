@@ -1,0 +1,31 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/ifabsent
+name: ifabsent
+title: "ifabsent: a default only generated code applies"
+description: >-
+  has_unit declares ifabsent string(m). Generated Pydantic classes fill it in; linkml-validate and JSON Schema do not.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+
+classes:
+  HeightMeasurement:
+    tree_root: true
+    attributes:
+      measurement_id:
+        identifier: true
+      has_numeric_value:
+        range: float
+      has_unit:
+        range: string
+        ifabsent: string(m)

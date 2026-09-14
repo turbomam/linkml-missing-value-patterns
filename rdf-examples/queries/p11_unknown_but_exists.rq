@@ -1,0 +1,29 @@
+# p11_unknown_but_exists: value specifications asserted to have a numeric value that is unknown (blank node value or existential restriction)
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX BFO: <http://purl.obolibrary.org/obo/BFO_>
+PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
+PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
+PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
+PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX OGMS: <http://purl.obolibrary.org/obo/OGMS_>
+PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
+PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+PREFIX NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_>
+
+SELECT ?kind ?vs WHERE {
+  {
+    BIND("blank node value" AS ?kind)
+    ?vs OBI:0001937 ?v .
+    FILTER(isBlank(?v))
+  } UNION {
+    BIND("existential restriction" AS ?kind)
+    ?vs a ?r .
+    ?r owl:onProperty OBI:0001937 ; owl:someValuesFrom xsd:decimal .
+    FILTER NOT EXISTS { ?vs OBI:0001937 ?anyValue }
+  }
+}

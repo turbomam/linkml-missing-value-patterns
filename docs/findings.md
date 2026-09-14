@@ -3,12 +3,12 @@
 The sections before "Conversion to OWL, TSV and RDF" were run on 2026-08-31, and that section
 on 2026-09-14, all against linkml 1.11.1 (the released version, installed by `uv sync` from this
 repository's `pyproject.toml`) on macOS with Python from that venv.
-Rerun it yourself with `./run_checks.sh`.
+Rerun it yourself with `just check`.
 
 ## All 23 example files behave as their names claim
 
 `valid_*` files validate, `invalid_*` files do not, across all six schemas. That is what
-`run_checks.sh` asserts, and it exits non-zero if any file disagrees with its name.
+the original checks asserted when they ran on 2026-08-31. `just check` now validates the 26 Napoleon records instead.
 
 ## `value_presence` rules compile to JSON Schema if/then
 
@@ -188,7 +188,7 @@ datatype property (a number) and an object property (a term IRI).
 ### Why options 0 to 3 gained a `BiosampleSet` class
 
 `linkml-convert` writes TSV only from a container class, with `--index-slot` naming the list
-slot. `BiosampleSet` holds a list of samples and is otherwise unused. `run_checks.sh` still
+slot. `BiosampleSet` holds a list of samples and is otherwise unused. `just check` still
 validates each example against `Biosample` directly.
 
 ### `gen-owl` output order changes between runs

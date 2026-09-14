@@ -1,0 +1,18 @@
+# p01 nothing asserted (the open-world default)
+#
+# LinkML option: none. This is what a record looks like when option0 is not enforced, and what
+# every other option degrades to if the reason is dropped.
+#
+# Present: examination 1 (from base.ttl) with Napoleon and the physician as participants.
+# Absent: any height assay, datum, value, unit, or statement about why.
+#
+# A consumer can infer nothing about his height from this record: under the open-world
+# assumption the missing triples may exist elsewhere. They cannot tell "not applicable",
+# "not collected", "withheld", or "lost in transit" apart, and cannot tell this from p12
+# (asked, answer unknown). The only triple this file adds is a human-readable comment.
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:   <https://example.org/napoleon/> .
+
+ex:examination1 rdfs:comment "Invented archive record. No height entry." .
+    # no length measurement assay part, no measurement datum, no datum status

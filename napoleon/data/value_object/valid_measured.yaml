@@ -1,0 +1,5 @@
+record_id: REC:0301
+height:
+  has_numeric_value: 1.67
+  has_unit: m
+source_type: physical measurement

@@ -1,0 +1,130 @@
+# base.ttl: shared individuals and a small axiom excerpt for every pattern file.
+#
+# Scenario: measurements of Napoleon Bonaparte's standing height, held in an imagined
+# present-day archive. THE ARCHIVE AND ALL OF ITS RECORDS (examinations, physician, witness,
+# descendant, hair lock, conversion run) ARE INVENTED FOR ILLUSTRATION. Only these figures are
+# sourced, from the English Wikipedia article "Napoleon complex"
+# (https://en.wikipedia.org/wiki/Napoleon_complex, read 2026-09-14): an estimate of 5 feet 2 inches
+# in pre-metric French measures, about 1.67 m; other historians give 5 feet 7 inches (1.70 m);
+# the British cartoonist James Gillray popularized the myth that he was short.
+#
+# Napoleon and a physician participate in an examination (health care encounter). Each pNN file
+# adds (or deliberately does not add) a length measurement assay with Napoleon as specified input,
+# a measurement datum about his height quality, and a value specification in metres.
+#
+# LinkML option: none (shared context).
+#
+# The TBox excerpt copies only axioms from the template rdf-examples/base.ttl (read from OBI
+# 2026-07-27 and COB 2025-12-15) plus OLS4 hierarchy results read 2026-09-14. Subclass axioms
+# marked "ancestor" state an OLS hierarchicalAncestors result, not necessarily a direct parent.
+# Transitivity of part of / has part (RO) is deliberately NOT copied: see p06.
+
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:        <https://example.org/napoleon/> .
+@prefix BFO:       <http://purl.obolibrary.org/obo/BFO_> .
+@prefix RO:        <http://purl.obolibrary.org/obo/RO_> .
+@prefix IAO:       <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:       <http://purl.obolibrary.org/obo/OBI_> .
+@prefix COB:       <http://purl.obolibrary.org/obo/COB_> .
+@prefix OGMS:      <http://purl.obolibrary.org/obo/OGMS_> .
+@prefix OMRSE:     <http://purl.obolibrary.org/obo/OMRSE_> .
+@prefix GENEPIO:   <http://purl.obolibrary.org/obo/GENEPIO_> .
+@prefix PATO:      <http://purl.obolibrary.org/obo/PATO_> .
+@prefix UO:        <http://purl.obolibrary.org/obo/UO_> .
+@prefix NCIT:      <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_> .
+
+<https://example.org/napoleon/base> a owl:Ontology ;
+    rdfs:comment "Shared individuals for the Napoleon height missing-value RDF examples. Archive records are invented for illustration." .
+
+########## Object properties ##########
+
+BFO:0000050 a owl:ObjectProperty ; rdfs:label "part of" ; owl:inverseOf BFO:0000051 .
+BFO:0000051 a owl:ObjectProperty ; rdfs:label "has part" .
+RO:0000057  a owl:ObjectProperty ; rdfs:label "has participant" .
+RO:0000087  a owl:ObjectProperty ; rdfs:label "has role" .
+RO:0000052  a owl:ObjectProperty ; rdfs:label "characteristic of" .
+IAO:0000136 a owl:ObjectProperty ; rdfs:label "is about" .
+IAO:0000039 a owl:ObjectProperty , owl:FunctionalProperty ; rdfs:label "has measurement unit label" .
+
+OBI:0000293 a owl:ObjectProperty ; rdfs:label "has specified input" ;
+    rdfs:subPropertyOf RO:0000057 ; rdfs:domain COB:0000035 .
+OBI:0000299 a owl:ObjectProperty ; rdfs:label "has specified output" ;
+    rdfs:subPropertyOf RO:0000057 ; rdfs:domain COB:0000035 .
+
+OBI:0001938 a owl:ObjectProperty ; rdfs:label "has value specification" ;
+    rdfs:subPropertyOf BFO:0000051 ; rdfs:domain IAO:0000030 ; rdfs:range OBI:0001933 .
+
+# COB 2025-12-15 declares this property with a label only: no definition, domain, or range.
+COB:0000085 a owl:ObjectProperty ; rdfs:label "intended plan process type" .
+
+########## Data properties (copied from OBI 2026-07-27) ##########
+
+OBI:0002135 a owl:DatatypeProperty ; rdfs:label "has specified value" ; rdfs:domain OBI:0001933 .
+OBI:0001937 a owl:DatatypeProperty ; rdfs:label "has specified numeric value" ;
+    rdfs:subPropertyOf OBI:0002135 ; rdfs:domain OBI:0001933 ; rdfs:range owl:real .
+
+########## Classes ##########
+
+OGMS:0000097 a owl:Class ; rdfs:label "health care encounter" .
+OBI:0000093 a owl:Class ; rdfs:label "patient role" .
+OMRSE:00000012 a owl:Class ; rdfs:label "health care provider role" .
+NCBITaxon:9606 a owl:Class ; rdfs:label "Homo sapiens" .
+PATO:0000119 a owl:Class ; rdfs:label "height" .
+
+COB:0000082 a owl:Class ; rdfs:label "planned process" .
+COB:0000035 a owl:Class ; rdfs:label "completely executed planned process" ;
+    rdfs:subClassOf COB:0000082 ;
+    owl:disjointWith COB:0000083 .          # present in both COB 2025-12-15 and OBI 2026-07-27
+COB:0000083 a owl:Class ; rdfs:label "failed planned process" ; rdfs:subClassOf COB:0000082 .
+
+OBI:0000070 a owl:Class ; rdfs:label "assay" ; rdfs:subClassOf COB:0000035 .   # ancestor
+# No OBI class for body height or stature measurement was found (OLS4 search, 2026-09-14).
+# OBI:0003817 is the closest verified OBI assay. CMO:0000106 'body height' exists in the Clinical
+# Measurement Ontology but is not used here.
+OBI:0003817 a owl:Class ; rdfs:label "length measurement assay" ; rdfs:subClassOf OBI:0000070 .  # ancestor
+OBI:0000435 a owl:Class ; rdfs:label "genotyping assay" ; rdfs:subClassOf OBI:0000070 .  # ancestor
+OBI:0003725 a owl:Class ; rdfs:label "survey administration assay" ; rdfs:subClassOf OBI:0000070 .
+
+IAO:0000030 a owl:Class ; rdfs:label "information content entity" .
+IAO:0000027 a owl:Class ; rdfs:label "data entity" ; rdfs:subClassOf IAO:0000030 .
+IAO:0000109 a owl:Class ; rdfs:label "measurement datum" ; rdfs:subClassOf IAO:0000027 .
+OBI:0000938 a owl:Class ; rdfs:label "categorical measurement datum" ; rdfs:subClassOf IAO:0000109 .
+OBI:0001933 a owl:Class ; rdfs:label "value specification" ; rdfs:subClassOf IAO:0000030 .
+OBI:0001931 a owl:Class ; rdfs:label "scalar value specification" ; rdfs:subClassOf OBI:0001933 .
+OBI:0001930 a owl:Class ; rdfs:label "categorical value specification" ; rdfs:subClassOf OBI:0001933 .
+
+GENEPIO:0001850 a owl:Class ; rdfs:label "datum status" ; rdfs:subClassOf IAO:0000027 .
+GENEPIO:0001619 a owl:Class ; rdfs:label "not applicable" ; rdfs:subClassOf GENEPIO:0001850 .
+GENEPIO:0001620 a owl:Class ; rdfs:label "not collected" ; rdfs:subClassOf GENEPIO:0001850 .
+GENEPIO:0001668 a owl:Class ; rdfs:label "not provided" ; rdfs:subClassOf GENEPIO:0001850 .
+GENEPIO:0001810 a owl:Class ; rdfs:label "restricted access" ; rdfs:subClassOf GENEPIO:0001850 .
+
+NCIT:C79729 a owl:Class ; rdfs:label "Asked but Unknown" .
+
+# UO units are punned: OLS lists UO:0000008 as both a class and an individual.
+UO:0000008 a owl:NamedIndividual ; rdfs:label "meter" .
+
+########## Individuals (all invented archive records except the person) ##########
+
+ex:napoleon a owl:NamedIndividual , NCBITaxon:9606 ;
+    rdfs:label "Napoleon Bonaparte" ;
+    RO:0000087 ex:patientRole1 .
+ex:patientRole1 a owl:NamedIndividual , OBI:0000093 .
+
+# His height quality, the thing each height datum is about.
+ex:napoleonHeight a owl:NamedIndividual , PATO:0000119 ;
+    rdfs:label "height of Napoleon Bonaparte" ;
+    RO:0000052 ex:napoleon .
+
+ex:physician1 a owl:NamedIndividual , NCBITaxon:9606 ;
+    rdfs:label "physician 1 (invented)" ;
+    RO:0000087 ex:physicianRole1 .
+ex:physicianRole1 a owl:NamedIndividual , OMRSE:00000012 .
+
+ex:examination1 a owl:NamedIndividual , OGMS:0000097 ;
+    rdfs:label "examination 1 (invented archive record)" ;
+    RO:0000057 ex:napoleon , ex:physician1 .

@@ -1,0 +1,42 @@
+# p07 withheld: value exists but is not released
+#
+# LinkML option: option3 sibling reason slot in this shape (the status is about the datum);
+# the same reason value can ride in option1, 1b or 2.
+#
+# ILLUSTRATIVE AND INVENTED: the archive holds a DNA comparison between material attributed to
+# Napoleon and a living descendant. The genotyping assay completed and produced a datum, but the
+# released graph carries no value, only a GENEPIO:0001810 'restricted access' status about the
+# datum (for example, because the descendant is a living person).
+#
+# A consumer can infer that the datum exists (GENEPIO defines restricted access as "the data ...
+# is available but not shared publicly"), so asking the data holder is worthwhile. That is what
+# distinguishes it from p03/p04, where no value was collected or provided.
+# They cannot infer anything about the result itself.
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/napoleon/> .
+@prefix IAO:     <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:     <http://purl.obolibrary.org/obo/OBI_> .
+@prefix GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_> .
+@prefix NCBITaxon: <http://purl.obolibrary.org/obo/NCBITaxon_> .
+
+ex:descendant1 a owl:NamedIndividual , NCBITaxon:9606 ;
+    rdfs:label "descendant 1 (invented)" .
+
+ex:dnaSample1 a owl:NamedIndividual ;
+    rdfs:label "DNA sample from descendant 1 (invented)" .
+
+ex:dnaComparison1 a owl:NamedIndividual , OBI:0000435 ;
+    rdfs:label "descendant DNA comparison 1 (invented)" ;
+    OBI:0000293 ex:dnaSample1 ;
+    OBI:0000299 ex:dnaDatum1 .
+
+ex:dnaDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:napoleon , ex:descendant1 .
+    # result withheld from this release
+
+ex:status7 a owl:NamedIndividual , GENEPIO:0001810 ;
+    IAO:0000136 ex:dnaDatum1 .

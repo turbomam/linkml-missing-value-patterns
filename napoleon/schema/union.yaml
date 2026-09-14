@@ -1,0 +1,46 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/union
+name: union
+title: "union: the real range or an INSDC reason (any_of)"
+description: >-
+  Each required slot accepts its real range or an INSDC missing value term, written with any_of. The slot stays required, and loses its single strong type.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - common
+
+classes:
+  HeightRecordSet:
+    description: A list of records, so the examples can be written as one table.
+    slots: [records]
+  HeightRecord:
+    tree_root: true
+    slots: [record_id, height_m, source_type]
+    slot_usage:
+      height_m:
+        required: true
+        range: Any
+        any_of:
+          - range: float
+          - range: InsdcMissingValueEnum
+      source_type:
+        required: true
+        range: Any
+        any_of:
+          - range: SourceTypeEnum
+          - range: InsdcMissingValueEnum
+slots:
+  records:
+    range: HeightRecord
+    multivalued: true
+    inlined_as_list: true

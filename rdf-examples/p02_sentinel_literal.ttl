@@ -1,0 +1,36 @@
+# p02 sentinel literal (ANTI-PATTERN)
+#
+# LinkML option: none. This is what option1 union degrades into when the slot range is weakened
+# to string, and what a spreadsheet column produces when text is typed into a number field.
+#
+# The string 5'2" sits where a number belongs, as the object of
+# OBI:0001937 'has specified numeric value', while the unit still says metre.
+#
+# A consumer who reads values naively gets a non-number (and a unit that does not match it); one
+# who filters to numbers silently loses the row. The string does not say whether the feet and
+# inches are French or English measures.
+# OBI declares the range of OBI:0001937 as owl:real, so with that axiom present (base.ttl) a
+# reasoner reports this graph inconsistent: see README ROBOT results.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/napoleon/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
+
+ex:heightAssay1 a owl:NamedIndividual , OBI:0003817 ;
+    BFO:0000050 ex:examination1 ;
+    OBI:0000293 ex:napoleon ;
+    OBI:0000299 ex:heightDatum1 .
+
+ex:heightDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:napoleonHeight ;
+    OBI:0001938 ex:valueSpec1 .
+
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
+    OBI:0001937 "5'2\"" ;                 # ANTI-PATTERN: a string where owl:real is required
+    IAO:0000039 UO:0000008 .

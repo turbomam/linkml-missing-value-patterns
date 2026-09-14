@@ -14,6 +14,11 @@ running discussion at https://github.com/obi-ontology/obi/issues/1230 about what
 assay to produce no datum. `docs/crosswalk.md` connects the two: which cause of absence lands in
 which option, what each one maps to in INSDC and NCIT, and where OBO has no term yet.
 
+> **For the 2026-09-14 OBI call:** the talk's exercises use one case, Napoleon's height, under
+> `napoleon/`, and every one runs from the justfile (`just --list`). The deck is
+> `slides/obi-2026-09-14.md`; the RDF examples are in `rdf-examples/`. The `src/` and `data/`
+> folders below hold the original depth examples.
+
 ## The problem
 
 A schema author marks `depth_m` as `required: true` with `range: float`. A submitter has a
@@ -76,15 +81,17 @@ lands, the `meaning:` values here are the only thing that needs to change.
 ## Running it
 
 ```bash
-just check      # or: uv sync && ./run_checks.sh
+just check      # or one pattern at a time: just strict, just union, just one-of, just value-object,
+                #   just reason-column, just side-report, just not-applicable
 ```
 
-`run_checks.sh` validates every file under `data/` against its option's schema and compares
-the result with the expectation in the filename: `valid_*` must pass, `invalid_*` must fail.
-It exits non-zero on any disagreement.
+Each pattern recipe validates that pattern's records under `napoleon/data/` against its schema in
+`napoleon/schema/`. A `valid_*` record must pass, and an `invalid_*` record is run with `!` so the
+recipe stops if it passes. `just check` runs all seven, after `just coverage` confirms every record
+file under `napoleon/data/` is named in a recipe.
 
-All 23 files behaved as their names claim when this was last run, on 2026-09-14 against
-linkml 1.11.1. Every measured claim in this repository comes from that version, and `uv.lock`
+All 26 Napoleon records behaved as their names claim when `just check` last ran, on 2026-09-14
+against linkml 1.11.1. The original depth examples under `data/` are covered by `just convert`. Every measured claim in this repository comes from that version, and `uv.lock`
 is committed so you get the same one. If you reproduce against a different release and get a
 different answer, that difference is worth reporting.
 

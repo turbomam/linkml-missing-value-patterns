@@ -1,0 +1,28 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/not_applicable
+name: not_applicable
+title: "not-applicable: a schema fact, not a value"
+description: >-
+  A HairLockRecord is about a relic, not a body, so the schema forbids height_m on it with value_presence ABSENT. Nothing has to be written in the data.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - common
+
+classes:
+  HairLockRecord:
+    tree_root: true
+    slots: [record_id, height_m, source_type]
+    slot_usage:
+      height_m:
+        value_presence: ABSENT

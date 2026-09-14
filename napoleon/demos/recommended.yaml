@@ -2,7 +2,8 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/recommended
 name: recommended
 title: "recommended: silent by default"
 description: >-
-  source_type is recommended. linkml-validate reports nothing when it is missing unless RecommendedSlotsPlugin is configured.
+  source_type is recommended. linkml-validate reports nothing when it is missing unless
+  RecommendedSlotsPlugin is configured.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -21,6 +22,8 @@ imports:
 
 classes:
   HeightRecord:
+    description: >-
+      An archive record whose source_type is recommended rather than required.
     tree_root: true
     slots: [record_id, height_m, source_type]
     slot_usage:

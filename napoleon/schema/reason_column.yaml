@@ -2,7 +2,8 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/reason_colu
 name: reason_column
 title: "reason-column: an optional height plus a reason column, tied by rules"
 description: >-
-  height_m stays a float and becomes optional. height_m_missing_reason holds an INSDC term or an asked-and-answered reason. Rules require exactly one of the two.
+  height_m stays a float and becomes optional. height_m_missing_reason holds an INSDC term or an
+  asked-and-answered reason. Rules require exactly one of the two.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -24,6 +25,8 @@ classes:
     description: A list of records, so the examples can be written as one table.
     slots: [records]
   HeightRecord:
+    description: >-
+      An archive record with an optional height and a column saying why it is absent.
     tree_root: true
     slots: [record_id, height_m, height_m_missing_reason, source_type]
     rules:
@@ -47,6 +50,8 @@ classes:
               value_presence: ABSENT
 slots:
   records:
+    description: >-
+      The records, as one list so they can be written as one table.
     range: HeightRecord
     multivalued: true
     inlined_as_list: true

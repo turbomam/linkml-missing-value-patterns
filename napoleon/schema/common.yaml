@@ -2,7 +2,11 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/common
 name: common
 title: "Shared slots and value sets for the Napoleon height examples"
 description: >-
-  Napoleon Bonaparte's height, recorded, disputed, converted and lost. The records in this folder are invented for illustration; the sourced facts are only that he was estimated at 5 feet 2 inches in pre-metric French measures, about 1.67 m, that other historians say 1.70 m, and that the cartoonist James Gillray popularized the myth that he was short (English Wikipedia, Napoleon complex, read 2026-09-14).
+  Napoleon Bonaparte's height, recorded, disputed, converted and lost. The records in this folder
+  are invented for illustration; the sourced facts are only that he was estimated at 5 feet 2 inches
+  in pre-metric French measures, about 1.67 m, that other historians say 1.70 m, and that the
+  cartoonist James Gillray popularized the myth that he was short (English Wikipedia, Napoleon
+  complex, read 2026-09-14).
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -25,6 +29,8 @@ classes:
 
 slots:
   record_id:
+    description: >-
+      Identifier of the archive record, not of Napoleon.
     identifier: true
     range: string
   height_m:
@@ -47,9 +53,10 @@ enums:
 
   InsdcMissingValueEnum:
     description: >-
-      The INSDC missing value reporting terms (https://www.insdc.org/technical-specifications/missing-value-reporting/).
-      Top and lower level terms point at their GENEPIO datum status terms. Reporting-level terms have no
-      ontology term to point at.
+      The INSDC missing value reporting terms
+      (https://www.insdc.org/technical-specifications/missing-value-reporting/). Top and lower level
+      terms point at their GENEPIO datum status terms. Reporting-level terms have no ontology term
+      to point at.
     comments:
       - >-
         Control sample and sample group are written here under "not applicable", as the INSDC table
@@ -61,7 +68,9 @@ enums:
         meaning: GENEPIO:0001619
       "not applicable: control sample":
         is_a: not applicable
-        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+        description: >-
+          The record is a laboratory control, such as a reagent blank. It has no donor, so no
+          height.
       "not applicable: sample group":
         is_a: not applicable
         description: The record pools several relic hair locks with no single origin.
@@ -109,7 +118,9 @@ enums:
         meaning: GENEPIO:0001619
       "not applicable: control sample":
         is_a: not applicable
-        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+        description: >-
+          The record is a laboratory control, such as a reagent blank. It has no donor, so no
+          height.
       "not applicable: sample group":
         is_a: not applicable
         description: The record pools several relic hair locks with no single origin.
@@ -151,14 +162,18 @@ enums:
       pipeline rather than the person. One value set, so the reports can be written as a table.
     permissible_values:
       lost in transit:
-        description: A value existed and a processing step lost it. Neither INSDC nor GENEPIO has a term for this.
+        description: >-
+          A value existed and a processing step lost it. Neither INSDC nor GENEPIO has a term for
+          this.
       in process:
         meaning: GENEPIO:0001662
       not applicable:
         meaning: GENEPIO:0001619
       "not applicable: control sample":
         is_a: not applicable
-        description: The record is a laboratory control, such as a reagent blank. It has no donor, so no height.
+        description: >-
+          The record is a laboratory control, such as a reagent blank. It has no donor, so no
+          height.
       "not applicable: sample group":
         is_a: not applicable
         description: The record pools several relic hair locks with no single origin.
@@ -186,4 +201,3 @@ enums:
         is_a: restricted access
       "missing: human-identifiable":
         is_a: restricted access
-

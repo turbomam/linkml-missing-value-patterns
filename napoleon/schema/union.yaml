@@ -2,7 +2,8 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/union
 name: union
 title: "union: the real range or an INSDC reason (any_of)"
 description: >-
-  Each required slot accepts its real range or an INSDC missing value term, written with any_of. The slot stays required, and loses its single strong type.
+  Each required slot accepts its real range or an INSDC missing value term, written with any_of. The
+  slot stays required, and loses its single strong type.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -24,6 +25,8 @@ classes:
     description: A list of records, so the examples can be written as one table.
     slots: [records]
   HeightRecord:
+    description: >-
+      An archive record of Napoleon's standing height, or a reason there is none.
     tree_root: true
     slots: [record_id, height_m, source_type]
     slot_usage:
@@ -41,6 +44,8 @@ classes:
           - range: InsdcMissingValueEnum
 slots:
   records:
+    description: >-
+      The records, as one list so they can be written as one table.
     range: HeightRecord
     multivalued: true
     inlined_as_list: true

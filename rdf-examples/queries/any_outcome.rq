@@ -1,0 +1,50 @@
+# One query for every outcome of trying to record Napoleon's height: a value, a bad value, a bound,
+# a reason in place of a value, a status about a datum, a failed attempt, an asserted absence, or an
+# answer of "unknown". Each row says which kind it found.
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:     <http://www.w3.org/2002/07/owl#>
+PREFIX prov:    <http://www.w3.org/ns/prov#>
+PREFIX ex:      <https://example.org/napoleon/>
+PREFIX OBI:     <http://purl.obolibrary.org/obo/OBI_>
+PREFIX IAO:     <http://purl.obolibrary.org/obo/IAO_>
+PREFIX COB:     <http://purl.obolibrary.org/obo/COB_>
+PREFIX RO:      <http://purl.obolibrary.org/obo/RO_>
+PREFIX BFO:     <http://purl.obolibrary.org/obo/BFO_>
+PREFIX NCIT:    <http://purl.obolibrary.org/obo/NCIT_>
+
+SELECT ?kind ?subject ?detail WHERE {
+  {
+    ?subject IAO:0000136 ex:napoleonHeight ; OBI:0001938 ?vs .
+    ?vs OBI:0001937 ?v .
+    OPTIONAL { ?vs prov:wasGeneratedBy ?run }
+    BIND(IF(isBlank(?v), "value exists, unknown",
+         IF(!isNumeric(?v), "value that is not a number",
+         IF(BOUND(?run), "value produced by a conversion", "value"))) AS ?kind)
+    BIND(STR(?v) AS ?detail)
+  } UNION {
+    ?subject IAO:0000136 ex:napoleonHeight ; OBI:0001938 ?vs .
+    ?vs a ?r . ?r owl:onProperty OBI:0001937 .
+    BIND("bounded or unknown value" AS ?kind) BIND("" AS ?detail)
+  } UNION {
+    ?subject IAO:0000136 ex:napoleonHeight ; OBI:0001938 ?reason .
+    ?reason a ?c . FILTER(STRSTARTS(STR(?c), "http://purl.obolibrary.org/obo/GENEPIO_"))
+    BIND("reason in place of a value" AS ?kind) BIND(STR(?c) AS ?detail)
+  } UNION {
+    ?status IAO:0000136 ?subject ; a ?c .
+    FILTER(STRSTARTS(STR(?c), "http://purl.obolibrary.org/obo/GENEPIO_"))
+    BIND("status about a datum" AS ?kind) BIND(STR(?c) AS ?detail)
+  } UNION {
+    ?subject a COB:0000083 ; RO:0000057 ex:napoleon .
+    OPTIONAL { ?subject COB:0000085 ?intended }
+    BIND("failed attempt" AS ?kind) BIND(COALESCE(STR(?intended), "") AS ?detail)
+  } UNION {
+    ?subject a ?neg . ?neg owl:complementOf ?r . ?r owl:onProperty BFO:0000051 ; owl:someValuesFrom OBI:0003817 .
+    BIND("asserted: no height measurement" AS ?kind) BIND("complement class" AS ?detail)
+  } UNION {
+    ?npa a owl:NegativePropertyAssertion ; owl:sourceIndividual ?subject ; owl:assertionProperty BFO:0000051 .
+    BIND("asserted: no height measurement" AS ?kind) BIND("negative property assertion" AS ?detail)
+  } UNION {
+    ?subject IAO:0000136 ex:napoleonHeight ; OBI:0001938 ?ans . ?ans a NCIT:C79729 .
+    BIND("answer was unknown" AS ?kind) BIND("NCIT:C79729" AS ?detail)
+  }
+}

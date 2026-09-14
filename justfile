@@ -149,12 +149,20 @@ rdf: setup
 rdf-matrix: setup
     {{bin}}/python rdf-examples/query_matrix.py
 
+# rdf-outcomes: one query finds every outcome of trying to record the height, in every pattern file
+rdf-outcomes: setup
+    {{bin}}/python rdf-examples/outcomes.py
+
+# linkml-matrix: every Napoleon record against every Napoleon schema; writes napoleon/MATRIX.md
+linkml-matrix: setup
+    {{bin}}/python napoleon/matrix.py
+
 # Rebuild generated/ for the original depth examples under src/ (pull request 2)
 convert: setup
     ./convert.sh
 
 # Run every exercise
-all: check recommended ifabsent open-world float-type tables rdf rdf-matrix
+all: check recommended ifabsent open-world float-type tables rdf rdf-matrix rdf-outcomes linkml-matrix
 
 # Render the Marp slide deck to HTML next to its source (needs Node; npx fetches marp-cli)
 slides:

@@ -1,0 +1,4 @@
+# A witness was asked and answered "unknown". Not the same as a blank.
+record_id: REC:0402
+height_m_missing_reason: asked, answer unknown
+source_type: memoir

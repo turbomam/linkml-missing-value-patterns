@@ -1,4 +1,0 @@
-@prefix ex: <https://example.org/demo/> .
-
-# The same s3 as in required_depth.ofn: a RequiredDepthSample with no depth.
-ex:s3 a ex:RequiredDepthSample .

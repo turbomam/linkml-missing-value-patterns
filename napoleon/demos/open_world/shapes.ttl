@@ -1,0 +1,7 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix nap: <https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/> .
+
+# The SHACL counterpart of DataMinCardinality(1 heightInMetres) in required_height.ofn.
+nap:MeasuredPersonShape a sh:NodeShape ;
+    sh:targetClass nap:MeasuredPerson ;
+    sh:property [ sh:path nap:heightInMetres ; sh:minCount 1 ] .

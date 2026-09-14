@@ -1,0 +1,7 @@
+# The value node still knows its unit, and says why there is no number.
+record_id: REC:0302
+height:
+  has_unit: pouce
+  reason: "missing: third party data"
+  reason_note: Reported in a memoir rather than measured (illustrative).
+source_type: memoir

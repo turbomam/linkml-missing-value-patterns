@@ -1,0 +1,6 @@
+record_id: REC:0303
+height:
+  has_numeric_value: 1.67
+  has_unit: m
+  reason: not collected
+source_type: physical measurement

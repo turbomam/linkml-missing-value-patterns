@@ -1,0 +1,4 @@
+@prefix nap: <https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/> .
+
+# The same napoleon as in required_height.ofn: a MeasuredPerson with no height.
+nap:napoleon a nap:MeasuredPerson .

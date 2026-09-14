@@ -1,0 +1,13 @@
+# All valid records in one list, for writing one table and one graph.
+records:
+- record_id: REC:0301
+  height:
+    has_numeric_value: 1.67
+    has_unit: m
+  source_type: physical measurement
+- record_id: REC:0302
+  height:
+    has_unit: pouce
+    reason: 'missing: third party data'
+    reason_note: Reported in a memoir rather than measured (illustrative).
+  source_type: memoir

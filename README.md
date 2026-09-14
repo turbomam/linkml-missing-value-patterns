@@ -14,6 +14,11 @@ running discussion at https://github.com/obi-ontology/obi/issues/1230 about what
 assay to produce no datum. `docs/crosswalk.md` connects the two: which cause of absence lands in
 which option, what each one maps to in INSDC and NCIT, and where OBO has no term yet.
 
+> **For the 2026-09-14 OBI call:** the talk's exercises use one case, Napoleon's height, under
+> `napoleon/`, and every one runs from the justfile (`just --list`). The deck is
+> `slides/obi-2026-09-14.md`; the RDF examples are in `rdf-examples/`. The `src/` and `data/`
+> folders below hold the original depth examples.
+
 ## The problem
 
 A schema author marks `depth_m` as `required: true` with `range: float`. A submitter has a

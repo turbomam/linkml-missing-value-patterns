@@ -1,0 +1,8 @@
+records:
+  - record_id: REC:0502
+    source_type: physical measurement
+missing_value_reports:
+  - about_record: REC:0502
+    about_slot: height_m
+    report_reason: in process
+    reported_by: archive curator

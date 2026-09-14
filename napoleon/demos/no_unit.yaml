@@ -1,0 +1,3 @@
+# has_unit is absent. Its ifabsent default is m.
+measurement_id: REC:0801
+has_numeric_value: 1.67

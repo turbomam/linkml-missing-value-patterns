@@ -1,0 +1,7 @@
+records:
+  - record_id: REC:0503
+    height_m: 1.67
+missing_value_reports:
+  - about_record: REC:0503
+    about_slot: source_type
+    report_reason: the dog ate it

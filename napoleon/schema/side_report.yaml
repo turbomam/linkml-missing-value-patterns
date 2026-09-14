@@ -1,0 +1,55 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/side_report
+name: side_report
+title: "side-report: the records stay plain and separate reports say why"
+description: >-
+  Records carry only real values. A MissingValueReport names the record, the slot and the reason. It is the only place to say the pipeline lost a value. A rule cannot reach across objects, so the pairing is not enforced.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - common
+
+classes:
+  Archive:
+    tree_root: true
+    slots: [records, missing_value_reports]
+  HeightRecord:
+    slots: [record_id, height_m, source_type]
+  MissingValueReport:
+    slots: [about_record, about_slot, report_reason, reason_note, reported_by]
+    slot_usage:
+      about_record:
+        required: true
+      about_slot:
+        required: true
+      report_reason:
+        required: true
+slots:
+  records:
+    range: HeightRecord
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  missing_value_reports:
+    range: MissingValueReport
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  about_record:
+    range: HeightRecord
+  about_slot:
+    range: string
+  report_reason:
+    range: ReportReasonEnum
+  reported_by:
+    range: string

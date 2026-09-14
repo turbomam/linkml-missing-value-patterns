@@ -1,0 +1,4 @@
+# The sourced estimate, as a number in metres.
+record_id: REC:0001
+height_m: 1.67
+source_type: physical measurement

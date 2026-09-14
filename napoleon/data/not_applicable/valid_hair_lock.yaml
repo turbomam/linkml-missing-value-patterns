@@ -1,0 +1,3 @@
+# A relic record: no height, and the schema says none is allowed.
+record_id: REC:0601
+source_type: physical measurement

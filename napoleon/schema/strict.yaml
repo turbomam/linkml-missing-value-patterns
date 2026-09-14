@@ -1,0 +1,30 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/strict
+name: strict
+title: "strict: required and typed, no escape hatch"
+description: >-
+  height_m and source_type are both required and strongly typed. A record with a good reason for no height cannot be written honestly.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - common
+
+classes:
+  HeightRecord:
+    tree_root: true
+    slots: [record_id, height_m, source_type]
+    slot_usage:
+      height_m:
+        required: true
+      source_type:
+        required: true

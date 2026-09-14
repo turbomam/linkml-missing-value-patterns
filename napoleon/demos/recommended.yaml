@@ -1,0 +1,28 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/recommended
+name: recommended
+title: "recommended: silent by default"
+description: >-
+  source_type is recommended. linkml-validate reports nothing when it is missing unless RecommendedSlotsPlugin is configured.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+# GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
+prefixes:
+  linkml: https://w3id.org/linkml/
+  nap: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/
+  REC: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/record/
+  GENEPIO: http://purl.obolibrary.org/obo/GENEPIO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+default_prefix: nap
+default_range: string
+imports:
+  - linkml:types
+  - ../schema/common
+
+classes:
+  HeightRecord:
+    tree_root: true
+    slots: [record_id, height_m, source_type]
+    slot_usage:
+      source_type:
+        recommended: true

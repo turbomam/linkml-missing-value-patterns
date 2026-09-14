@@ -1,0 +1,4 @@
+# A reagent blank from a hair analysis. No donor, so no height and no source.
+record_id: REC:0102
+height_m: "not applicable: control sample"
+source_type: "not applicable: control sample"

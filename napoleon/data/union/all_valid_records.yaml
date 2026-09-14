@@ -1,0 +1,11 @@
+# All valid records in one list, for writing one table and one graph.
+records:
+- record_id: REC:0102
+  height_m: 'not applicable: control sample'
+  source_type: 'not applicable: control sample'
+- record_id: REC:0101
+  height_m: 1.67
+  source_type: physical measurement
+- record_id: REC:0103
+  height_m: not collected
+  source_type: not collected

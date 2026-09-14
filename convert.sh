@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Write every schema as OWL, and every option's valid examples as one YAML file, one TSV table
-# and one RDF (Turtle) graph, using only the standard LinkML command line tools.
+# Write every schema as OWL, gather each option's valid examples into one YAML file, and convert
+# that file to TSV and Turtle wherever the conversion works (docs/findings.md lists which), using
+# only the standard LinkML command line tools.
 # Everything is written under generated/, which this script deletes and rebuilds.
 #
 # Some options do not survive conversion, and that is a finding rather than a bug in this

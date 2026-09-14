@@ -53,10 +53,10 @@ enums:
 
   InsdcMissingValueEnum:
     description: >-
-      The INSDC missing value reporting terms (https://www.insdc.org/technical-
-      specifications/missing-value-reporting/).
-      Top and lower level terms point at their GENEPIO datum status terms. Reporting-level terms have no
-      ontology term to point at.
+      The INSDC missing value reporting terms
+      (https://www.insdc.org/technical-specifications/missing-value-reporting/). Top and lower level
+      terms point at their GENEPIO datum status terms. Reporting-level terms have no ontology term
+      to point at.
     comments:
       - >-
         Control sample and sample group are written here under "not applicable", as the INSDC table

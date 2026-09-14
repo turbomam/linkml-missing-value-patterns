@@ -30,12 +30,13 @@ In `base.ttl`, `ex:napoleonHeight` is a PATO:0000119 height that is RO:0000052 c
 ## LinkML records (`napoleon/data/`)
 
 Apart from side-report, no Napoleon schema has a data slot saying what a record is about. The referent
-comes from schema metadata: the `HeightRecord` class descriptions name Napoleon, while the class name
-itself does not. In side-report, `MissingValueReport` states its subject with `about_record` and `about_slot`.
+comes from schema metadata, in class or slot descriptions: most `HeightRecord` class descriptions name
+Napoleon, `value_object.yaml` names him only in the `height` slot description, and the side-report
+`HeightRecord` description does not name him. The class name itself never does. In side-report, `MissingValueReport` states its subject with `about_record` and `about_slot`.
 
 | Record | What it is about | Aboutness |
 |---|---|---|
-| [strict/valid_measured](https://github.com/turbomam/linkml-missing-value-patterns/blob/main/napoleon/data/strict/valid_measured.yaml) and the other measured records | Napoleon's height, per the class description | implicit: in schema metadata, not in the data |
+| [strict/valid_measured](https://github.com/turbomam/linkml-missing-value-patterns/blob/main/napoleon/data/strict/valid_measured.yaml) and the other measured records | Napoleon's height, per the schema's class or slot descriptions | implicit: in schema metadata, not in the data |
 | [union/valid_control_sample](https://github.com/turbomam/linkml-missing-value-patterns/blob/main/napoleon/data/union/valid_control_sample.yaml) | a reagent blank, per its comment | conflicts with its class: a HeightRecord that is not about a person |
 | [union/valid_not_collected](https://github.com/turbomam/linkml-missing-value-patterns/blob/main/napoleon/data/union/valid_not_collected.yaml) | height at birth, per its comment | implicit subject; the time is only in a comment |
 | [one_of/valid_human_identifiable](https://github.com/turbomam/linkml-missing-value-patterns/blob/main/napoleon/data/one_of/valid_human_identifiable.yaml) | a living descendant's height, per its comment | conflicts with its class: not Napoleon |

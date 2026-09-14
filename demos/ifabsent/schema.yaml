@@ -1,0 +1,29 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/demos/ifabsent
+name: demo_ifabsent
+title: "Demo: where an ifabsent default is and is not applied"
+description: >-
+  depth_unit declares ifabsent string(m). Generated Python and Pydantic classes fill that value in
+  when an object is created without it. linkml-validate and the generated JSON Schema do not.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  SAMP: https://w3id.org/turbomam/linkml-missing-value-patterns/sample/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+  Biosample:
+    tree_root: true
+    attributes:
+      sample_id:
+        identifier: true
+      depth_m:
+        range: float
+      depth_unit:
+        range: string
+        ifabsent: string(m)

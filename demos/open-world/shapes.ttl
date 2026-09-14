@@ -1,0 +1,10 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix ex: <https://example.org/demo/> .
+
+# The SHACL counterpart of DataMinCardinality(1 hasDepth) in required_depth.ofn.
+ex:RequiredDepthShape a sh:NodeShape ;
+    sh:targetClass ex:RequiredDepthSample ;
+    sh:property [
+        sh:path ex:hasDepth ;
+        sh:minCount 1
+    ] .

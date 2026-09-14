@@ -1,0 +1,27 @@
+id: https://w3id.org/turbomam/linkml-missing-value-patterns/demos/recommended
+name: demo_recommended
+title: "Demo: a recommended slot that is missing"
+description: >-
+  depth_m is recommended, not required. The default validator says nothing when it is missing.
+  The RecommendedSlotsPlugin, named in a validation config, reports it as a warning.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  SAMP: https://w3id.org/turbomam/linkml-missing-value-patterns/sample/
+default_prefix: mvp
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+  Biosample:
+    tree_root: true
+    attributes:
+      sample_id:
+        identifier: true
+      depth_m:
+        range: float
+        recommended: true

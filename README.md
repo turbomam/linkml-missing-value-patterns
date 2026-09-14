@@ -76,12 +76,12 @@ lands, the `meaning:` values here are the only thing that needs to change.
 ## Running it
 
 ```bash
-just check      # or: uv sync && ./run_checks.sh
+just check      # or one option at a time: just option0, just option1, ... just option4
 ```
 
-`run_checks.sh` validates every file under `data/` against its option's schema and compares
-the result with the expectation in the filename: `valid_*` must pass, `invalid_*` must fail.
-It exits non-zero on any disagreement.
+Each `just optionN` recipe validates that option's files under `data/` against its schema. A
+`valid_*` file must pass, and an `invalid_*` file is run with `!` so the recipe stops if it
+passes. `just check` runs all six.
 
 All 23 files behaved as their names claim when this was last run, on 2026-09-14 against
 linkml 1.11.1. Every measured claim in this repository comes from that version, and `uv.lock`

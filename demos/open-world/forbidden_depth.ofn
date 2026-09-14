@@ -1,0 +1,13 @@
+Prefix(:=<https://example.org/demo/>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+
+# A NonDepthSample has no depth. s1 is one, and has a depth. An OWL reasoner calls this
+# inconsistent: OWL can reject a value that must not be there.
+Ontology(<https://example.org/demo/forbidden_depth>
+Declaration(Class(:NonDepthSample))
+Declaration(DataProperty(:hasDepth))
+Declaration(NamedIndividual(:s1))
+SubClassOf(:NonDepthSample DataMaxCardinality(0 :hasDepth))
+ClassAssertion(:NonDepthSample :s1)
+DataPropertyAssertion(:hasDepth :s1 "12.5"^^xsd:decimal)
+)

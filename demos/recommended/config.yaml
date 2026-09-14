@@ -1,0 +1,9 @@
+# linkml-validate configuration that adds RecommendedSlotsPlugin to the default JSON Schema check.
+# Pass the data file on the command line. In linkml 1.11.1, a file listed under data_sources in
+# this config is not read at all, and validation reports "No issues found".
+schema: demos/recommended/schema.yaml
+target_class: Biosample
+plugins:
+  JsonschemaValidationPlugin:
+    closed: true
+  RecommendedSlotsPlugin:

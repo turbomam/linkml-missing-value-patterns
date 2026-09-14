@@ -19,3 +19,7 @@ convert: setup
 
 # Run the checks, then rebuild generated/
 all: check convert
+
+# Render the Marp slide deck to HTML next to its source (needs Node; npx fetches marp-cli)
+slides:
+    npx -y @marp-team/marp-cli@4.5.1 --no-stdin slides/obi-2026-09-14.md -o slides/obi-2026-09-14.html

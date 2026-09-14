@@ -1,0 +1,10 @@
+# yamllint configuration for the LinkML schemas and records. Run with: just lint
+extends: default
+rules:
+  document-start: disable        # LinkML schemas and records do not use "---"
+  line-length:
+    max: 110
+  indentation:
+    indent-sequences: whatever   # PyYAML writes lists without extra indentation
+  truthy:
+    check-keys: false

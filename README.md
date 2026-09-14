@@ -17,7 +17,7 @@ which option, what each one maps to in INSDC and NCIT, and where OBO has no term
 > **For the 2026-09-14 OBI call:** the talk's exercises use one case, Napoleon's height, under
 > `napoleon/`, and every one runs from the justfile (`just --list`). The deck is
 > `slides/obi-2026-09-14.md`; the RDF examples are in `rdf-examples/`. The `src/` and `data/`
-> folders below hold the original depth examples.
+> folders below hold the original depth examples. What each example is about: `docs/aboutness.md`.
 
 ## The problem
 

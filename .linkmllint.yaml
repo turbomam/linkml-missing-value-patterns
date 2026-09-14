@@ -1,0 +1,12 @@
+# linkml-lint configuration for napoleon/. Run with: just lint
+extends: recommended
+rules:
+  # Every class and slot needs a description.
+  recommended:
+    level: error
+  # Enum value names here are the literal INSDC and NCIT terms a submitter types, such as
+  # "not applicable: control sample", so they cannot follow snake_case or UPPER_SNAKE naming.
+  standard_naming:
+    level: warning
+    exclude_type:
+      - permissible_value

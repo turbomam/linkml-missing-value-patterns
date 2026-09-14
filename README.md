@@ -94,8 +94,8 @@ different answer, that difference is worth reporting.
 just convert    # or: uv sync && ./convert.sh
 ```
 
-This writes OWL for every schema, and each option's valid examples as one YAML file, one TSV
-table and one Turtle graph, under `generated/`. It uses only the standard LinkML tools
+This writes OWL for every schema, and each option's valid examples as one YAML file, under
+`generated/`. Every option except 1 and 1b also gets one TSV table and one Turtle graph. It uses only the standard LinkML tools
 (`gen-owl`, `linkml-convert`).
 
 The union options (1 and 1b) validate, but cannot be written as TSV or Turtle with linkml

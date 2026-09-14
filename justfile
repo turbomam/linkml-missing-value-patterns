@@ -145,12 +145,16 @@ rdf: setup
     ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p06_not_applicable_contradiction.ttl --output {{build}}/rdf-merged/p06c.ofn
     ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p10_negation_contradiction.ttl --output {{build}}/rdf-merged/p10c.ofn
 
+# rdf-matrix: every RDF query against every pattern file; the diagonal must match, off-diagonal hits are listed
+rdf-matrix: setup
+    {{bin}}/python rdf-examples/query_matrix.py
+
 # Rebuild generated/ for the original depth examples under src/ (pull request 2)
 convert: setup
     ./convert.sh
 
 # Run every exercise
-all: check recommended ifabsent open-world float-type tables rdf
+all: check recommended ifabsent open-world float-type tables rdf rdf-matrix
 
 # Render the Marp slide deck to HTML next to its source (needs Node; npx fetches marp-cli)
 slides:

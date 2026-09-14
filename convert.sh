@@ -37,7 +37,8 @@ container_for() {
 
 # The union options put a number and a term IRI in the same slot. Neither the TSV nor the Turtle
 # writer in linkml 1.11.1 can serialize that; see docs/findings.md. Each expected failure is
-# recognized by its error text, so a different failure in the same conversion still counts.
+# recognized by the text of its final exception, so a different failure in the same conversion
+# still counts.
 expected_failure() {
   case "$1:$2" in
     option1:tsv|option1b:tsv) echo "which is not a dict" ;;
@@ -52,15 +53,17 @@ log=$(mktemp)
 surprises=0
 
 report() {  # option, output, succeeded (yes/no)
-  local signature actual=ok note=""
+  local signature final actual=ok note=""
   signature=$(expected_failure "$1" "$2")
   [ "$3" = yes ] || actual=fail
+  # The terminal exception is the last Error or Exception line; only that line is compared.
+  final=$(grep -E 'Error|Exception' "$log" | tail -1)
   if [ -n "$signature" ]; then
     if [ "$actual" = ok ]; then
       note="UNEXPECTED: expected a failure containing '$signature'"
       surprises=$((surprises+1))
-    elif ! grep -qF "$signature" "$log"; then
-      note="UNEXPECTED: failed without '$signature'"
+    elif ! printf '%s\n' "$final" | grep -qF "$signature"; then
+      note="UNEXPECTED: final error lacks '$signature'"
       surprises=$((surprises+1))
     fi
   elif [ "$actual" = fail ]; then
@@ -68,7 +71,7 @@ report() {  # option, output, succeeded (yes/no)
     surprises=$((surprises+1))
   fi
   if [ "$actual" = fail ]; then
-    note="$note $(grep -E 'Error|Exception' "$log" | tail -1 | cut -c1-90)"
+    note="$note $(printf '%s\n' "$final" | cut -c1-90)"
   fi
   printf '%-9s %-7s %-6s %s\n' "$1" "$2" "$actual" "$note"
 }

@@ -16,8 +16,12 @@ default:
 setup:
     uv sync
 
+# Fail if any record file under napoleon/data is not named in a recipe, so a new fixture cannot go unchecked
+coverage:
+    {{bin}}/python -c 'import pathlib,sys; j=pathlib.Path("justfile").read_text(); m=[str(f) for f in sorted(pathlib.Path("napoleon/data").glob("*/*.yaml")) if f.name.startswith(("valid_","invalid_")) and "/".join(f.parts[-2:]) not in j]; print("unchecked:", m) if m else print("every record file is named in a recipe"); sys.exit(1 if m else 0)'
+
 # Run every pattern: each valid_* record must pass and each invalid_* record must fail
-check: strict union one-of value-object reason-column side-report not-applicable
+check: coverage strict union one-of value-object reason-column side-report not-applicable
     @echo "every record behaved as its name claims"
 
 # strict: height_m required and a float, with no way to say why it is missing
@@ -131,7 +135,7 @@ tables: setup
     cd {{s}} && ../../{{bin}}/linkml-convert -s side_report.yaml -C Archive --index-slot records -t tsv -o ../../{{build}}/tables/side_report_records.tsv ../data/side_report/valid_lost_in_transit.yaml && cat ../../{{build}}/tables/side_report_records.tsv
     cd {{s}} && ../../{{bin}}/linkml-convert -s side_report.yaml -C Archive --index-slot missing_value_reports -t tsv -o ../../{{build}}/tables/side_report_reports.tsv ../data/side_report/valid_lost_in_transit.yaml && cat ../../{{build}}/tables/side_report_reports.tsv
     @echo "== union as TSV and as Turtle (both expected to fail)"
-    ! sh -c 'cd {{s}} && ../../{{bin}}/linkml-convert -s union.yaml -C HeightRecordSet --index-slot records -t tsv -o ../../{{build}}/tables/union.tsv ../data/union/all_valid_records.yaml 2>&1 | grep -E "Error|Exception" | tail -1; exit 1'
+    ! {{bin}}/python -c 'import subprocess,sys; r=subprocess.run(["../../{{bin}}/linkml-convert","-s","union.yaml","-C","HeightRecordSet","--index-slot","records","-t","tsv","-o","/dev/null","../data/union/all_valid_records.yaml"],cwd="{{s}}",capture_output=True,text=True); print([l for l in r.stderr.splitlines() if "Exception" in l or "Error" in l][-1:]); sys.exit(r.returncode)'
     ! {{bin}}/python -c 'import subprocess,sys; r=subprocess.run(["../../{{bin}}/linkml-convert","-s","union.yaml","-C","HeightRecordSet","--index-slot","records","-t","ttl","../data/union/all_valid_records.yaml"],cwd="{{s}}",capture_output=True,text=True); print([l for l in r.stderr.splitlines() if "Error" in l][-1:]); sys.exit(r.returncode)'
 
 # rdf: Napoleon's height in OBO terms; each query finds its pattern, and HermiT checks every merged file
@@ -161,7 +165,7 @@ linkml-matrix: setup
 convert: setup
     ./convert.sh
 
-# Run every exercise
+# Run every exercise except convert, which rewrites committed generated/ files (their OWL text order changes)
 all: check recommended ifabsent open-world float-type tables rdf rdf-matrix rdf-outcomes linkml-matrix
 
 # Render the Marp slide deck to HTML next to its source (needs Node; npx fetches marp-cli)

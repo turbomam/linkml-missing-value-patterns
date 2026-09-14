@@ -81,15 +81,17 @@ lands, the `meaning:` values here are the only thing that needs to change.
 ## Running it
 
 ```bash
-just check      # or one option at a time: just option0, just option1, ... just option4
+just check      # or one pattern at a time: just strict, just union, just one-of, just value-object,
+                #   just reason-column, just side-report, just not-applicable
 ```
 
-Each `just optionN` recipe validates that option's files under `data/` against its schema. A
-`valid_*` file must pass, and an `invalid_*` file is run with `!` so the recipe stops if it
-passes. `just check` runs all six.
+Each pattern recipe validates that pattern's records under `napoleon/data/` against its schema in
+`napoleon/schema/`. A `valid_*` record must pass, and an `invalid_*` record is run with `!` so the
+recipe stops if it passes. `just check` runs all seven, after `just coverage` confirms every record
+file under `napoleon/data/` is named in a recipe.
 
-All 23 files behaved as their names claim when this was last run, on 2026-09-14 against
-linkml 1.11.1. Every measured claim in this repository comes from that version, and `uv.lock`
+All 26 Napoleon records behaved as their names claim when `just check` last ran, on 2026-09-14
+against linkml 1.11.1. The original depth examples under `data/` are covered by `just convert`. Every measured claim in this repository comes from that version, and `uv.lock`
 is committed so you get the same one. If you reproduce against a different release and get a
 different answer, that difference is worth reporting.
 

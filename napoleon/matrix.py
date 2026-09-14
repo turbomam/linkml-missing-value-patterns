@@ -15,7 +15,7 @@ from linkml.validator.plugins import JsonschemaValidationPlugin
 from linkml_runtime.utils.schemaview import SchemaView
 
 ROOT = Path(__file__).resolve().parent
-REPO = "https://github.com/turbomam/linkml-missing-value-patterns/blob/slides-obi-2026-09-14/napoleon"
+REPO = "."  # links relative to napoleon/MATRIX.md, so they work on any branch
 SCHEMAS = ["strict", "union", "one_of", "value_object", "reason_column", "side_report", "not_applicable"]
 
 

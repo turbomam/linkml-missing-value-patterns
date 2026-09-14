@@ -1,6 +1,6 @@
 # RDF examples: ways Napoleon's height ends up missing
 
-A reworking of `../rdf-examples/` (blood glucose in a health care encounter) with a different
+A reworking of the earlier blood glucose examples (this directory at commit 406a35f) (blood glucose in a health care encounter) with a different
 scenario, for the OBI developer call on 2026-09-14. Pattern numbering, file names, queries, the
 negative control, and the ROBOT checks follow the template. Terms reused from the template were
 verified there; new terms were checked against the OLS4 API on 2026-09-14.

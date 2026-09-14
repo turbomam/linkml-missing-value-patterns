@@ -8,7 +8,7 @@ Rerun it yourself with `just check`.
 ## All 23 example files behave as their names claim
 
 `valid_*` files validate, `invalid_*` files do not, across all six schemas. That is what
-`just check` asserts, and it stops if any file disagrees with its name.
+the original checks asserted when they ran on 2026-08-31. `just check` now validates the 26 Napoleon records instead.
 
 ## `value_presence` rules compile to JSON Schema if/then
 

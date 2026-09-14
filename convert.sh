@@ -6,8 +6,8 @@
 # Some options do not survive conversion, and that is a finding rather than a bug in this
 # script (see docs/findings.md). Those failures are expected and reported. The script exits
 # non-zero if a conversion fails that was expected to work, succeeds when it was expected to
-# fail, or fails for a reason other than the documented one, so the findings cannot go stale
-# silently.
+# fail, or fails for a reason other than the documented one, so the TSV and Turtle findings
+# cannot go stale silently. The JSON-LD finding in docs/findings.md is not rechecked here.
 # Written for bash 3.2, which is what macOS ships, so no associative arrays.
 
 set -uo pipefail

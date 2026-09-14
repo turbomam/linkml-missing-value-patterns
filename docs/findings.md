@@ -102,13 +102,14 @@ pTX, `OBI:0002204` pNX) and all of them are cancer staging.
 ## Conversion to OWL, TSV and RDF
 
 Run on 2026-09-14 with linkml 1.11.1 and linkml-runtime 1.11.1, using `./convert.sh`. It writes
-OWL for every schema, and each option's valid examples as one YAML file, one TSV table and one
-Turtle graph, all under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
+OWL for every schema, and each option's valid examples as one YAML file, plus one TSV table and
+one Turtle graph for every option except 1 and 1b, which cannot be converted (see below). All of
+it goes under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
 
 | Option | OWL (`gen-owl`) | TSV | RDF (Turtle) |
 |---|---|---|---|
 | 0 strict | yes | yes | yes |
-| 1 union | yes, but the numeric union is lost | no | no |
+| 1 union | yes, but the union becomes a malformed datatype | no | no |
 | 1b union | same as option 1 | no | no |
 | 2 reified | yes | yes, the value object flattens to `depth_*` columns | yes, the value node carries the reason |
 | 3 sibling | yes | yes, one extra column | yes |
@@ -125,7 +126,8 @@ correctly. TSV and Turtle fail outright. JSON-LD writes RDF, but the RDF is wron
 - **TSV** fails with `Exception: Value of depth_m = {...}, which is not a dict`.
 - **Turtle** fails with `Unknown CURIE prefix: @base`. The RDF writer treats a value in a slot
   declared `range: Any` as a reference to another object.
-- **JSON-LD** (`linkml-convert -t json-ld`, then parsing the file with rdflib) raises no error,
+- **JSON-LD** (`linkml-convert -t json-ld`, then parsing the file with rdflib; run once by hand on
+  2026-09-14 and not rechecked by `convert.sh`) raises no error,
   but the RDF is wrong: `12.5` gets the datatype `mvp:@id`, and the reason strings become
   `file://` IRIs. That is the worse result, because nothing reports it.
 
@@ -134,10 +136,13 @@ datatype property (a number) and an object property (a term IRI).
 
 ### What `gen-owl` does with these schemas
 
-- **The numeric union disappears.** In option 1, `depth_m` stays an `owl:DatatypeProperty`
-  with range `xsd:float`. The branch that allows a reason term is dropped, with only the log
-  line `Ambiguous type for: depth_m`. ROBOT's OWL 2 DL check then reports
-  `Cannot pun between properties` for `depth_m`. The union of two enums on `env_broad_scale`
+- **The numeric union becomes malformed.** In option 1, the property `depth_m` is declared an
+  `owl:DatatypeProperty` with range `xsd:float`, so the property declaration loses the reason
+  branch, with only the log line `Ambiguous type for: depth_m`. The union does survive in the
+  `Biosample` restriction, but as `owl:allValuesFrom [ owl:intersectionOf ( [ a rdfs:Datatype ;
+  owl:unionOf ( xsd:float mvp:MissingValueReasonEnum ) ] mvp:Any ) ]`: a datatype whose union
+  includes a class. ROBOT's OWL 2 DL check reports `Cannot pun between properties` for
+  `depth_m` and `Datatype IRI also used as Class IRI` for `xsd:float`. The union of two enums on `env_broad_scale`
   does survive, as `owl:unionOf`.
 - **Rules become class axioms, but `value_presence` is ignored.** The string `value_presence`
   appears nowhere in `linkml/generators/owlgen.py` in 1.11.1.
@@ -155,7 +160,8 @@ datatype property (a number) and an object property (a term IRI).
     "owlgen value_presence" found no open issue.
 - **An external term gains a parent.** Each permissible value with a `meaning:` becomes an
   `owl:Class` at that IRI, asserted as a subclass of the enum:
-  `NCIT_C48660 rdfs:subClassOf mvp:MissingValueReasonEnum`. Merging this OWL with NCIT adds a
+  `NCIT:C48660 rdfs:subClassOf mvp:MissingValueReasonEnum` (written in the file as the full IRI
+  `http://purl.obolibrary.org/obo/NCIT_C48660`). Merging this OWL with NCIT adds a
   parent to an NCIT term. `other` has no `meaning:`, so it gets the local IRI
   `.../MissingValueReasonEnum#other`.
 - **None of the six OWL files is in the OWL 2 DL profile.** The findings common to all six are

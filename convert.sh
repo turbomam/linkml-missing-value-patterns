@@ -5,8 +5,9 @@
 #
 # Some options do not survive conversion, and that is a finding rather than a bug in this
 # script (see docs/findings.md). Those failures are expected and reported. The script exits
-# non-zero if a conversion fails that was expected to work, or succeeds when it was expected
-# to fail, so the findings cannot go stale silently.
+# non-zero if a conversion fails that was expected to work, succeeds when it was expected to
+# fail, or fails for a reason other than the documented one, so the findings cannot go stale
+# silently.
 # Written for bash 3.2, which is what macOS ships, so no associative arrays.
 
 set -uo pipefail
@@ -33,12 +34,14 @@ container_for() {
   esac
 }
 
-# The union options put a number and a term IRI in the same slot. Neither the TSV nor the RDF
-# writer in linkml 1.11.1 can serialize that. See docs/findings.md.
-expected_to_fail() {
+# The union options put a number and a term IRI in the same slot. Neither the TSV nor the Turtle
+# writer in linkml 1.11.1 can serialize that; see docs/findings.md. Each expected failure is
+# recognized by its error text, so a different failure in the same conversion still counts.
+expected_failure() {
   case "$1:$2" in
-    option1:tsv|option1:ttl|option1b:tsv|option1b:ttl) return 0 ;;
-    *) return 1 ;;
+    option1:tsv|option1b:tsv) echo "which is not a dict" ;;
+    option1:ttl|option1b:ttl) echo "Unknown CURIE prefix: @base" ;;
+    *) echo "" ;;
   esac
 }
 
@@ -48,15 +51,25 @@ log=$(mktemp)
 surprises=0
 
 report() {  # option, output, succeeded (yes/no)
-  local expected=ok actual=ok note=""
-  expected_to_fail "$1" "$2" && expected=fail
+  local signature actual=ok note=""
+  signature=$(expected_failure "$1" "$2")
   [ "$3" = yes ] || actual=fail
-  if [ "$expected" != "$actual" ]; then
+  if [ -n "$signature" ]; then
+    if [ "$actual" = ok ]; then
+      note="UNEXPECTED: expected a failure containing '$signature'"
+      surprises=$((surprises+1))
+    elif ! grep -qF "$signature" "$log"; then
+      note="UNEXPECTED: failed without '$signature'"
+      surprises=$((surprises+1))
+    fi
+  elif [ "$actual" = fail ]; then
     note="UNEXPECTED"
     surprises=$((surprises+1))
   fi
-  [ "$actual" = fail ] && note="$note $(grep -E 'Error|Exception' "$log" | tail -1 | cut -c1-90)"
-  printf '%-9s %-6s %-5s %s\n' "$1" "$2" "$actual" "$note"
+  if [ "$actual" = fail ]; then
+    note="$note $(grep -E 'Error|Exception' "$log" | tail -1 | cut -c1-90)"
+  fi
+  printf '%-9s %-7s %-6s %s\n' "$1" "$2" "$actual" "$note"
 }
 
 convert() {  # schema, container class, index slot, format, output, input
@@ -68,22 +81,24 @@ convert() {  # schema, container class, index slot, format, output, input
      --index-slot "$3" -t "$4" -o "$root/$5" "$root/$6") > "$log" 2>&1
 }
 
-printf '%-9s %-6s %-5s %s\n' OPTION OUTPUT RESULT NOTE
+printf '%-9s %-7s %-6s %s\n' OPTION OUTPUT RESULT NOTE
 printf '%.0s-' $(seq 1 78); echo
 
 for opt in option0 option1 option1b option2 option3 option4; do
   schema=$(schema_for "$opt")
   out=generated/$opt
+  owl="generated/owl/$(basename "$schema" .yaml).owl.ttl"
   mkdir -p "$out"
 
-  if "$BIN/gen-owl" "$schema" > "generated/owl/$(basename "$schema" .yaml).owl.ttl" 2> "$log"; then
+  if "$BIN/gen-owl" "$schema" > "$owl" 2> "$log"; then
     report "$opt" owl yes
   else
+    rm -f "$owl"
     report "$opt" owl no
   fi
 
   # Gather the valid examples into one container document, so they become one table and one graph.
-  "$BIN/python" - "$opt" "$out/examples.yaml" <<'EOF'
+  if ! "$BIN/python" - "$opt" "$out/examples.yaml" > "$log" 2>&1 <<'EOF'
 import pathlib, sys, yaml
 opt, target = sys.argv[1], pathlib.Path(sys.argv[2])
 merged = {}
@@ -92,8 +107,15 @@ for f in sorted(pathlib.Path("data", opt).glob("valid_*.yaml")):
     parts = doc if "samples" in doc else {"samples": [doc]}
     for key, items in parts.items():
         merged.setdefault(key, []).extend(items)
+if not merged:
+    sys.exit(f"no valid_*.yaml files under data/{opt}")
 target.write_text(yaml.safe_dump(merged, sort_keys=False, allow_unicode=True))
 EOF
+  then
+    rm -f "$out/examples.yaml"
+    report "$opt" yaml no
+    continue
+  fi
 
   for fmt in tsv ttl; do
     if convert "$schema" "$(container_for "$opt")" samples "$fmt" "$out/examples.$fmt" "$out/examples.yaml"; then
@@ -106,7 +128,7 @@ EOF
 done
 
 # Option 4 keeps its absence records in a second list, which a samples table cannot show.
-if convert "$(schema_for option4)" Dataset missing_value_reports tsv \
+if [ -f generated/option4/examples.yaml ] && convert "$(schema_for option4)" Dataset missing_value_reports tsv \
      generated/option4/missing_value_reports.tsv generated/option4/examples.yaml; then
   report option4 tsv:mvr yes
 else

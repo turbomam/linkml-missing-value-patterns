@@ -1,0 +1,21 @@
+# p00: glucose measurement data with a numeric value and unit
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX BFO: <http://purl.obolibrary.org/obo/BFO_>
+PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
+PREFIX IAO: <http://purl.obolibrary.org/obo/IAO_>
+PREFIX OBI: <http://purl.obolibrary.org/obo/OBI_>
+PREFIX COB: <http://purl.obolibrary.org/obo/COB_>
+PREFIX GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_>
+PREFIX NCIT: <http://purl.obolibrary.org/obo/NCIT_>
+
+SELECT ?assay ?datum ?value ?unit WHERE {
+  ?assay a OBI:2100072 ; OBI:0000299 ?datum .
+  ?datum OBI:0001938 ?vs .
+  ?vs OBI:0001937 ?value ; IAO:0000039 ?unit .
+  FILTER(isNumeric(?value))
+}

@@ -1,0 +1,51 @@
+# p08 bounded value: below the lower limit of detection
+#
+# LinkML option: none (docs/crosswalk.md, cause d: a bounded value, not a missing one).
+#
+# The value specification carries no point value. Instead it is typed with an OWL datatype
+# restriction: it has some numeric value below 20 (xsd:maxExclusive). The detection limit itself
+# is an instance of OBI:0003549 'lower limit of detection' with its own number and unit.
+#
+# OBI gaps, checked 2026-09-14 against OBI 2026-07-27 and OLS4: OBI has no 'less than' relation,
+# no 'range value specification' class, and no minimum/maximum numeric value properties (the
+# only min/max value specifications are OBI:0002556/0002557 for age). OBI:0003548 and
+# OBI:0003549 are declared with a parent and definition only, and no other axiom in obi.owl
+# references them, so there is no OBI pattern linking a datum to its detection limit. The link
+# used here is BFO:0000051 'has part' (the superproperty of OBI:0001938), which is a choice made
+# for this example, not an OBI pattern.
+#
+# A consumer can infer that a value exists and is below 20 mg/dL. A plain SPARQL consumer has to
+# read the restriction structure to get the bound; an OWL reasoner treats it as a real constraint.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/encounter/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
+
+ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
+    BFO:0000050 ex:encounter1 ;
+    OBI:0000293 ex:specimen1 ;
+    OBI:0000299 ex:glucoseDatum1 .
+
+ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:specimen1 ;
+    OBI:0001938 ex:valueSpec1 ;
+    BFO:0000051 ex:lod1 .
+
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ,
+        [ a owl:Restriction ;
+          owl:onProperty OBI:0001937 ;
+          owl:someValuesFrom
+            [ a rdfs:Datatype ;
+              owl:onDatatype xsd:decimal ;
+              owl:withRestrictions ( [ xsd:maxExclusive "20"^^xsd:decimal ] ) ] ] ;
+    IAO:0000039 UO:0010067 .
+
+ex:lod1 a owl:NamedIndividual , OBI:0003549 ;
+    OBI:0001937 "20"^^xsd:decimal ;
+    IAO:0000039 UO:0010067 .

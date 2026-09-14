@@ -1,0 +1,45 @@
+# p11 unknown but exists: "there is a value, we do not know it"
+#
+# LinkML option: none. Closest is option2 with a value object present and no reason.
+#
+# Two forms on two value specifications:
+#   valueSpec1: Wikidata style. The object of 'has specified numeric value' is a blank node.
+#     Wikidata's RDF export writes "unknown value" (somevalue) as a blank node or skolem IRI in
+#     the value position (not re-checked in this session). In RDF this is well formed; in OWL 2
+#     DL it is not, because OBI:0001937 is a data property and a blank node is not a literal.
+#     ROBOT was not run on this file for that reason.
+#   valueSpec1b: OWL 2 DL form. The node is typed "has specified numeric value some xsd:decimal".
+#
+# A consumer can infer that a numeric value exists (so this is not p01, p03 or p06), and nothing
+# about its magnitude. Compare p08, which adds a bound.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/encounter/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
+
+ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
+    BFO:0000050 ex:encounter1 ;
+    OBI:0000293 ex:specimen1 ;
+    OBI:0000299 ex:glucoseDatum1 .
+
+ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:specimen1 ;
+    OBI:0001938 ex:valueSpec1 , ex:valueSpec1b .
+
+# Wikidata-style (RDF only, not OWL 2 DL)
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
+    OBI:0001937 _:someValue ;
+    IAO:0000039 UO:0010067 .
+
+# OWL 2 DL form
+ex:valueSpec1b a owl:NamedIndividual , OBI:0001931 ,
+        [ a owl:Restriction ;
+          owl:onProperty OBI:0001937 ;
+          owl:someValuesFrom xsd:decimal ] ;
+    IAO:0000039 UO:0010067 .

@@ -1,0 +1,42 @@
+# p10 negation: "this encounter has no glucose measurement"
+#
+# LinkML option: none.
+#
+# Two OWL forms, both about encounter1 in base.ttl:
+#   1. Class membership in a complement, the OWL analogue of Wikidata's "no value":
+#      encounter1 is a member of not (has part some 'glucose assay').
+#   2. A NegativeObjectPropertyAssertion: encounter1 does not have ex:glucoseAssay1 as a part.
+#      This is much weaker: it denies one named individual and says nothing about others.
+#
+# The prompt also mentioned NegativeDataPropertyAssertion. It does not fit this sentence: it
+# denies one literal (e.g. "valueSpec1 does not have numeric value 95"), which presupposes a
+# value specification and says nothing about the measurement being absent.
+#
+# A consumer with a reasoner can infer that any assertion of a glucose assay (or of any subclass,
+# such as OBI:2100072) as part of encounter1 contradicts the record: see
+# p10_negation_contradiction.ttl. A SPARQL consumer has to read the restriction structure;
+# plain triple patterns see neither form as "no value".
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/encounter/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+
+# Form 1
+ex:encounter1 a
+    [ a owl:Class ;
+      owl:complementOf
+        [ a owl:Restriction ;
+          owl:onProperty BFO:0000051 ;
+          owl:someValuesFrom OBI:2100020 ] ] .
+
+# Form 2
+ex:glucoseAssay1 a owl:NamedIndividual .
+
+[] a owl:NegativePropertyAssertion ;
+    owl:sourceIndividual ex:encounter1 ;
+    owl:assertionProperty BFO:0000051 ;
+    owl:targetIndividual ex:glucoseAssay1 .

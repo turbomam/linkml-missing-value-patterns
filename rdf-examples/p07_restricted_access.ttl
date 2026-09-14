@@ -1,0 +1,39 @@
+# p07 withheld: value exists but is not released
+#
+# LinkML option: option3 sibling reason slot in this shape (the status is about the datum,
+# beside 'has value specification'); the same reason value can ride in option1, 1b or 2.
+#
+# The assay completed and produced a datum. The released graph has the value specification
+# node and unit but no number, plus a GENEPIO:0001810 'restricted access' status about the datum.
+#
+# A consumer can infer that the value exists and was measured (GENEPIO defines restricted access
+# as "the data ... is available but not shared publicly"), so asking the data holder again is
+# worthwhile. That is what distinguishes it from p03/p04 'not collected', where no value exists.
+# They cannot infer anything about the value itself.
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/encounter/> .
+@prefix BFO:     <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:     <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:     <http://purl.obolibrary.org/obo/OBI_> .
+@prefix GENEPIO: <http://purl.obolibrary.org/obo/GENEPIO_> .
+@prefix UO:      <http://purl.obolibrary.org/obo/UO_> .
+
+ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
+    BFO:0000050 ex:encounter1 ;
+    OBI:0000293 ex:specimen1 ;
+    OBI:0000299 ex:glucoseDatum1 .
+
+ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:specimen1 ;
+    OBI:0001938 ex:valueSpec1 .
+
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
+    IAO:0000039 UO:0010067 .
+    # numeric value withheld from this release
+
+ex:status7 a owl:NamedIndividual , GENEPIO:0001810 ;
+    IAO:0000136 ex:glucoseDatum1 .

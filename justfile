@@ -109,12 +109,23 @@ float-type: setup
     @echo "== SQL DDL"
     {{bin}}/gen-sqlddl src/schema/option0_strict.yaml 2>/dev/null | grep -i 'depth_m'
 
+# The blood glucose patterns as RDF: every file parses, every query finds its pattern, HermiT agrees
+rdf: setup
+    {{bin}}/python rdf-examples/run_queries.py --merged-dir {{build}}/rdf-merged
+    @echo "== HermiT: these merged patterns are consistent"
+    for p in p00_complete p01_nothing_asserted p03_reason_as_term p04_value_node_without_value p05_failed_assay p06_not_applicable p07_restricted_access p08_bounded_value p09_lost_in_transit p10_negation p11_unknown_but_exists p12_asked_unknown; do robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_$p.ttl --output {{build}}/rdf-merged/$p.ofn || exit 1; echo "consistent: $p"; done
+    @echo "== HermiT: these are inconsistent on purpose (each line is expected to fail)"
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p02_sentinel_literal.ttl --output {{build}}/rdf-merged/p02.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p05_failed_assay_contradiction.ttl --output {{build}}/rdf-merged/p05c.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p06_not_applicable_contradiction.ttl --output {{build}}/rdf-merged/p06c.ofn
+    ! robot reason --reasoner HermiT --input {{build}}/rdf-merged/merged_p10_negation_contradiction.ttl --output {{build}}/rdf-merged/p10c.ofn
+
 # Rebuild generated/: OWL for every option schema, each option's examples as YAML, and TSV and Turtle where conversion works
 convert: setup
     ./convert.sh
 
 # Run every demonstration, then rebuild generated/
-all: check recommended ifabsent open-world float-type convert
+all: check recommended ifabsent open-world float-type rdf convert
 
 # Render the Marp slide deck to HTML next to its source (needs Node; npx fetches marp-cli)
 slides:

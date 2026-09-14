@@ -1,0 +1,73 @@
+# p09 lost in transit: the absence is recorded about the dataset, not the patient
+#
+# LinkML option: option4 out-of-band report.
+#
+# Patient record: identical in shape to p01 plus a value specification with a unit and no number.
+# It carries no reason. Separate records: a PROV-O ingest activity that used a source export and
+# generated the released dataset, and a SHACL validation report whose result names the value
+# specification node and the missing property, with a message saying the value existed upstream.
+#
+# A consumer who reads only the patient record sees p01. One who joins the report can infer that
+# the sample is not at fault, the pipeline is, and the value may be recoverable from the source.
+# Closest OBO term for this state: GENEPIO:0001618 'missing' ("known to be recorded in the past
+# but the observed value cannot be located or retrieved"). It is deliberately not attached to
+# the patient record here.
+#
+# PROV-O: https://www.w3.org/TR/prov-o/  SHACL: https://www.w3.org/TR/shacl/
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix ex:   <https://example.org/encounter/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
+
+### Patient record (carries nothing about the loss)
+
+ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
+    BFO:0000050 ex:encounter1 ;
+    OBI:0000293 ex:specimen1 ;
+    OBI:0000299 ex:glucoseDatum1 .
+
+ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:specimen1 ;
+    OBI:0001938 ex:valueSpec1 .
+
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
+    IAO:0000039 UO:0010067 .
+
+### Dataset and pipeline records
+
+ex:sourceExport1 a prov:Entity ;
+    rdfs:label "LIS export 2026-09-01 (contains glucose 95 mg/dL for specimen 1)" .
+
+ex:ingestRun1 a prov:Activity ;
+    rdfs:label "ingest run 1" ;
+    prov:used ex:sourceExport1 ;
+    prov:startedAtTime "2026-09-02T09:00:00Z"^^xsd:dateTime ;
+    rdfs:comment "Unit conversion step had no mapping for the source unit string; the value was dropped." .
+
+ex:dataset1 a prov:Entity ;
+    rdfs:label "released encounter dataset 1" ;
+    prov:wasGeneratedBy ex:ingestRun1 ;
+    prov:wasDerivedFrom ex:sourceExport1 .
+
+ex:validationRun1 a prov:Activity ;
+    prov:used ex:dataset1 .
+
+ex:report1 a sh:ValidationReport ;
+    prov:wasGeneratedBy ex:validationRun1 ;
+    sh:conforms false ;
+    sh:result ex:result1 .
+
+ex:result1 a sh:ValidationResult ;
+    sh:focusNode ex:valueSpec1 ;
+    sh:resultPath OBI:0001937 ;
+    sh:resultSeverity sh:Violation ;
+    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+    sh:resultMessage "Value present in ex:sourceExport1, dropped by ex:ingestRun1 (unit conversion)." .

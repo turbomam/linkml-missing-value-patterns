@@ -1,0 +1,35 @@
+# p02 sentinel literal (ANTI-PATTERN)
+#
+# LinkML option: none. This is what option1 union degrades into when the slot range is weakened
+# to string, and what a spreadsheet column produces when a code is typed into a number field.
+#
+# The string "not collected" sits where a number belongs, as the object of
+# OBI:0001937 'has specified numeric value'.
+#
+# A consumer who reads values naively gets a non-number, and one who filters to numbers silently
+# loses the row. The string is not a term, so nothing distinguishes "not collected" from a typo.
+# OBI declares the range of OBI:0001937 as owl:real, so with that axiom present (base.ttl) a
+# reasoner reports this graph inconsistent: see README ROBOT results.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://example.org/encounter/> .
+@prefix BFO:  <http://purl.obolibrary.org/obo/BFO_> .
+@prefix IAO:  <http://purl.obolibrary.org/obo/IAO_> .
+@prefix OBI:  <http://purl.obolibrary.org/obo/OBI_> .
+@prefix UO:   <http://purl.obolibrary.org/obo/UO_> .
+
+ex:glucoseAssay1 a owl:NamedIndividual , OBI:2100072 ;
+    BFO:0000050 ex:encounter1 ;
+    OBI:0000293 ex:specimen1 ;
+    OBI:0000299 ex:glucoseDatum1 .
+
+ex:glucoseDatum1 a owl:NamedIndividual , IAO:0000109 ;
+    IAO:0000136 ex:specimen1 ;
+    OBI:0001938 ex:valueSpec1 .
+
+ex:valueSpec1 a owl:NamedIndividual , OBI:0001931 ;
+    OBI:0001937 "not collected" ;          # ANTI-PATTERN: a string where owl:real is required
+    IAO:0000039 UO:0010067 .

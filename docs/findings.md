@@ -102,9 +102,9 @@ pTX, `OBI:0002204` pNX) and all of them are cancer staging.
 ## Conversion to OWL, TSV and RDF
 
 Run on 2026-09-14 with linkml 1.11.1 and linkml-runtime 1.11.1, using `./convert.sh`. It writes
-OWL for every schema, and each option's valid examples as one YAML file, plus one TSV table and
-one Turtle graph for every option except 1 and 1b, which cannot be converted (see below). All of
-it goes under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
+OWL for every schema, gathers each option's valid examples into one YAML file, and converts that
+file to TSV and Turtle wherever the conversion works. The table lists what each option gets. All
+of it goes under `generated/`. The OWL 2 DL checks used ROBOT 1.9.10.
 
 | Option | OWL (`gen-owl`) | TSV | RDF (Turtle) |
 |---|---|---|---|
@@ -129,7 +129,7 @@ correctly. TSV and Turtle fail outright. JSON-LD writes RDF, but the RDF is wron
 - **JSON-LD** (`linkml-convert -t json-ld`, then parsing the file with rdflib; run once by hand on
   2026-09-14 and not rechecked by `convert.sh`) raises no error,
   but the RDF is wrong: `12.5` gets the datatype `mvp:@id`, and the reason strings become
-  `file://` IRIs. That is the worse result, because nothing reports it.
+  `file://` IRIs. That is the worst of the three results, because nothing reports it.
 
 This is the tooling version of a real constraint. In OWL 2 DL, one property cannot be both a
 datatype property (a number) and an object property (a term IRI).

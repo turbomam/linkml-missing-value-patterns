@@ -1,0 +1,4 @@
+samples:
+- sample_id: SAMP:0001
+  depth_m: 12.5
+  env_broad_scale: terrestrial biome

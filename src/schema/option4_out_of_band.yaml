@@ -16,9 +16,15 @@ description: >-
   real cost and it is stated here rather than hidden.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 
+# ENVO, NCIT and SAMP are also declared here, not only in common.yaml, because the Python
+# generator behind linkml-convert drops prefixes declared only in an imported schema:
+# https://github.com/linkml/linkml/issues/3574
 prefixes:
   linkml: https://w3id.org/linkml/
   mvp: https://w3id.org/turbomam/linkml-missing-value-patterns/
+  ENVO: http://purl.obolibrary.org/obo/ENVO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  SAMP: https://w3id.org/turbomam/linkml-missing-value-patterns/sample/
 default_prefix: mvp
 default_range: string
 

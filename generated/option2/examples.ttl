@@ -1,0 +1,24 @@
+@prefix ENVO: <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix SAMP: <https://w3id.org/turbomam/linkml-missing-value-patterns/sample/> .
+@prefix mvp: <https://w3id.org/turbomam/linkml-missing-value-patterns/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+SAMP:0201 a mvp:Biosample ;
+    mvp:depth [ a mvp:DepthMeasurement ;
+            mvp:has_numeric_value "12.5"^^xsd:float ;
+            mvp:has_unit "m" ] ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+SAMP:0202 a mvp:Biosample ;
+    mvp:depth [ a mvp:DepthMeasurement ;
+            mvp:has_unit "m" ;
+            mvp:reason_detail NCIT:C150904 ;
+            mvp:reason_for_absence NCIT:C126101 ;
+            mvp:reason_note "Exact depth withheld under the site data agreement." ] ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+[] a mvp:BiosampleSet ;
+    mvp:samples SAMP:0201,
+        SAMP:0202 .
+

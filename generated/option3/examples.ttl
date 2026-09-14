@@ -1,0 +1,18 @@
+@prefix ENVO: <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix SAMP: <https://w3id.org/turbomam/linkml-missing-value-patterns/sample/> .
+@prefix mvp: <https://w3id.org/turbomam/linkml-missing-value-patterns/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+SAMP:0301 a mvp:Biosample ;
+    mvp:depth_m "12.5"^^xsd:float ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+SAMP:0302 a mvp:Biosample ;
+    mvp:depth_m_missing_reason NCIT:C157157 ;
+    mvp:env_broad_scale ENVO:00000446 .
+
+[] a mvp:BiosampleSet ;
+    mvp:samples SAMP:0301,
+        SAMP:0302 .
+

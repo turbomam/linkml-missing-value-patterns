@@ -2,7 +2,9 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/side_report
 name: side_report
 title: "side-report: the records stay plain and separate reports say why"
 description: >-
-  Records carry only real values. A MissingValueReport names the record, the slot and the reason. It is the only place to say the pipeline lost a value. A rule cannot reach across objects, so the pairing is not enforced.
+  Records carry only real values. A MissingValueReport names the record, the slot and the reason. It
+  is the only place to say the pipeline lost a value. A rule cannot reach across objects, so the
+  pairing is not enforced.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -21,11 +23,17 @@ imports:
 
 classes:
   Archive:
+    description: >-
+      The records plus the reports explaining what is missing from them.
     tree_root: true
     slots: [records, missing_value_reports]
   HeightRecord:
+    description: >-
+      An archive record carrying only real values.
     slots: [record_id, height_m, source_type]
   MissingValueReport:
+    description: >-
+      A statement that one slot of one record has no value, and why.
     slots: [about_record, about_slot, report_reason, reason_note, reported_by]
     slot_usage:
       about_record:
@@ -36,20 +44,32 @@ classes:
         required: true
 slots:
   records:
+    description: >-
+      The archive records.
     range: HeightRecord
     multivalued: true
     inlined: true
     inlined_as_list: true
   missing_value_reports:
+    description: >-
+      Reports about values missing from the records.
     range: MissingValueReport
     multivalued: true
     inlined: true
     inlined_as_list: true
   about_record:
+    description: >-
+      The record the report is about.
     range: HeightRecord
   about_slot:
+    description: >-
+      The name of the slot that has no value.
     range: string
   report_reason:
+    description: >-
+      Why the slot has no value.
     range: ReportReasonEnum
   reported_by:
+    description: >-
+      Who or what determined the reason: a curator and an ingest pipeline are different sources.
     range: string

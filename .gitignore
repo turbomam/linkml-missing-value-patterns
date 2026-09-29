@@ -4,3 +4,4 @@ __pycache__/
 slides/*.html
 slides/*.pdf
 .demo-build/
+.DS_Store

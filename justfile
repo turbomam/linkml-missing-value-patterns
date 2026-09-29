@@ -16,12 +16,23 @@ default:
 setup:
     uv sync
 
+# Lint every Napoleon schema (linkml-lint with .linkmllint.yaml), validate each against the metamodel,
+# and lint every YAML file under napoleon/ (yamllint with .yamllint.yaml)
+lint: setup
+    {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/schema
+    {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/demos/recommended.yaml
+    {{bin}}/linkml-lint --config .linkmllint.yaml napoleon/demos/ifabsent.yaml
+    # Metamodel validation: with no -s, linkml-validate treats each positional file as a schema and
+    # validates it against the LinkML metamodel (see linkml-validate --help, linkml 1.11.1).
+    for f in napoleon/schema/*.yaml napoleon/demos/recommended.yaml napoleon/demos/ifabsent.yaml; do {{validate}} "$f" || exit 1; done
+    uvx --from yamllint==1.38.0 yamllint -c .yamllint.yaml napoleon
+
 # Fail if any record file under napoleon/data is not named in a recipe, so a new fixture cannot go unchecked
 coverage:
     {{bin}}/python -c 'import pathlib,sys; j=pathlib.Path("justfile").read_text(); m=[str(f) for f in sorted(pathlib.Path("napoleon/data").glob("*/*.yaml")) if f.name.startswith(("valid_","invalid_")) and "/".join(f.parts[-2:]) not in j]; print("unchecked:", m) if m else print("every record file is named in a recipe"); sys.exit(1 if m else 0)'
 
 # Run every pattern: each valid_* record must pass and each invalid_* record must fail
-check: coverage strict union one-of value-object reason-column side-report not-applicable
+check: lint coverage strict union one-of value-object reason-column side-report not-applicable
     @echo "every record behaved as its name claims"
 
 # strict: height_m required and a float, with no way to say why it is missing

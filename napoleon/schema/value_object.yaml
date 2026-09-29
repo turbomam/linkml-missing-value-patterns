@@ -2,7 +2,8 @@ id: https://w3id.org/turbomam/linkml-missing-value-patterns/napoleon/value_objec
 name: value_object
 title: "value-object: a height object holding a number or a reason"
 description: >-
-  height is required and is always a HeightMeasurement. The object holds a numeric value or a reason for its absence, never both and never neither, so the slot keeps one strong range.
+  height is required and is always a HeightMeasurement. The object holds a numeric value or a reason
+  for its absence, never both and never neither, so the slot keeps one strong range.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 # GENEPIO, NCIT and REC are repeated in each schema, not only in common.yaml, because the Python
 # generator behind linkml-convert drops prefixes declared only in an imported schema:
@@ -24,12 +25,16 @@ classes:
     description: A list of records, so the examples can be written as one table.
     slots: [records]
   HeightRecord:
+    description: >-
+      An archive record whose height is always a HeightMeasurement object.
     tree_root: true
     slots: [record_id, height, source_type]
     slot_usage:
       height:
         required: true
   HeightMeasurement:
+    description: >-
+      A height measurement: a number with its unit, or a reason there is no number.
     slots: [has_numeric_value, has_unit, reason, reason_note]
     rules:
       - title: a_value_forbids_a_reason
@@ -52,16 +57,24 @@ classes:
               value_presence: PRESENT
 slots:
   records:
+    description: >-
+      The records, as one list so they can be written as one table.
     range: HeightRecord
     multivalued: true
     inlined_as_list: true
   height:
+    description: >-
+      Napoleon's standing height, as a value object.
     range: HeightMeasurement
     inlined: true
   has_numeric_value:
+    description: >-
+      The number, in the unit given by has_unit.
     range: float
   has_unit:
     description: The unit, meaningful even when there is no number.
     range: string
   reason:
+    description: >-
+      Why there is no number, as an INSDC term.
     range: InsdcMissingValueEnum

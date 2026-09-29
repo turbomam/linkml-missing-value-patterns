@@ -8,6 +8,11 @@
 #   (open since 2020-09-06). See the template rdf-examples/p05_failed_assay.ttl for the positions
 #   recorded there.
 #
+# No subclasses of COB:0000083 'failed planned process'. James A. Overton gave that position on the
+# OBI developer call of 2026-09-14 (relayed by Mark Miller). So the attempt is an instance of
+# COB:0000083 itself, and the intended assay type is given with COB:0000085, not with a
+# 'failed height measurement' class.
+#
 # What exists (checked 2026-09-14): COB:0000083 'failed planned process' (subclass of COB:0000082,
 # disjoint with COB:0000035 in COB 2025-12-15 and OBI 2026-07-27) and COB:0000085 'intended plan
 # process type', an object property with a label and no definition, domain, or range. It is used
